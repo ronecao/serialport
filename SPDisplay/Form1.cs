@@ -28,6 +28,7 @@ namespace SPDisplay
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //test
             labelArray = new System.Windows.Forms.Label[10];
             for (int i = 0; i < labelArray.Length/2; i++)
             {
