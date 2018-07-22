@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static SPDisplay.Utils;
 
 
 namespace SPDisplay
@@ -29,7 +30,7 @@ namespace SPDisplay
         byte[] startendframe = new byte[5];
         private Form1 mainform;
         SerialPort sp1;
-
+        public Boolean switcher;
 
         public ProcessPort( Form1 form){
 
@@ -37,30 +38,20 @@ namespace SPDisplay
             g_ports = SerialPort.GetPortNames();
 
             this.mainform = form;
-
+          byte [] datad= packrequest(REQTYPE.DATA,new byte[]{ 0x01,0x80 });
+            dumpdata(datad, 7, "request data");
 
 
             int i = 1230;
             byte[] intBuff = BitConverter.GetBytes(i); // 将 int 转换成字节数组
-            dumpdata(intBuff, 4, "int123");
+            Utils.dumpdata(intBuff, 4, "int123");
             i = BitConverter.ToInt32(intBuff, 0);
             Console.WriteLine("i ="+i);
+            switcher = false;
 
         }
 
-        public void dumpdata(byte[] b, int length, String title) {
-            Console.WriteLine(title + "lengght"+ length);
-            for (int i = 0; i < length; i++){
-                Console.Write(b[i].ToString("X2"));
-                Console.Write(" ");
-                if ((i+1) % 16 == 0)
-                {
-                    Console.WriteLine(" ");
-                }
-       
-            }
-            Console.WriteLine(" ");
-        }
+
 
         public void scan() {
             /*for (int i = 0; i < g_ports.Length; i++){
@@ -74,21 +65,45 @@ namespace SPDisplay
             }
             Thread t = new Thread(new ThreadStart(dofun));
             t.Start();
-
+            Thread t1 = new Thread(new ThreadStart(dotimer));
+            t1.Start();
 
         }
         public void dofun() {
 
             while (true)
             {
-                down("COM4", sp1);
+                //down("COM4", sp1);
                 //Thread.Sleep(50);
+                if (!switcher)
+                {
+                    Console.WriteLine("thread one");
+                }
+                    
+
+               // Thread.Sleep(1000);
+            }
+        }
+        public void dotimer()
+        {
+
+            while (true)
+            {
+                //down("COM4", sp1);
+                //Thread.Sleep(50);
+                if (switcher)
+                {
+
+                    Console.WriteLine("threa two");
+                }
+                    
+                //Thread.Sleep(1000);
             }
         }
         public SerialPort openport(String Portname)
         {
             SerialPort sp1 = new SerialPort();
-            sp1.BaudRate = Baudrate;
+            sp1.BaudRate = 115200;
             sp1.PortName = Portname;
 
             switch (Parity.ToLower())
@@ -199,7 +214,7 @@ namespace SPDisplay
                 if (counter == 5){
                     byte[] temp = new byte[data.Count];
                     temp = (byte[])data.ToArray(typeof(byte));
-                    dumpdata(temp, temp.Length, "temp");
+                    Utils.dumpdata(temp, temp.Length, "temp");
 
                     if (temp[1] == 0xff && temp[2] == 0x87 && temp[3] == 0x7e && temp[4] == 0x23)
                     {
@@ -230,7 +245,7 @@ namespace SPDisplay
             }
             byte[] newdata = new byte[data.Count];
             newdata = (byte[])data.ToArray(typeof(byte));
-            dumpdata(newdata, newdata.Length, "receiveddata");
+            Utils.dumpdata(newdata, newdata.Length, "receiveddata");
             unpackdata(newdata, newdata.Length);
 
 
@@ -387,183 +402,34 @@ namespace SPDisplay
 
             }
         }
-
-        public int findPorts(int i)
-        {
-            Boolean secondTap;
-            SerialPort sp1 = new SerialPort();
-
-
-            //todo need get config from chipdna.config.xml
-            //sp1.BaudRate = 9600;
-            sp1.BaudRate = Baudrate;
-            sp1.PortName = g_ports[i];
-
-            switch (Parity.ToLower())
-            {
-                case "none":
-                    sp1.Parity = System.IO.Ports.Parity.None;
+        public byte[] packrequest(REQTYPE type, byte[] value) {
+            byte[] header =new byte[] { 0x81, 0x06, 0x09 };
+            byte[] returnvalue = new byte[7];
+            returnvalue[0] = header[0];
+            returnvalue[1] = header[1];
+            returnvalue[2] = header[2];
+            switch (type){
+                case REQTYPE.ERROR:
+                    returnvalue[3] = 0x15;
+                    returnvalue[4] = 0x00;
+                    returnvalue[5] = 0x00;
                     break;
-                case "even":
-                    sp1.Parity = System.IO.Ports.Parity.Even;
+                case REQTYPE.FIND:
+                    returnvalue[3] = 0x25;
+                    returnvalue[4] = 0x00;
+                    returnvalue[5] = 0x00;
                     break;
-                case "odd":
-                    sp1.Parity = System.IO.Ports.Parity.Odd;
+                case REQTYPE.DATA:
+                    returnvalue[3] = 0x35;
+                    returnvalue[4] = 0x01;
+                    returnvalue[5] = 0x80;
                     break;
-                case "mark":
-                    sp1.Parity = System.IO.Ports.Parity.Mark;
-                    break;
-                case "space":
-                    sp1.Parity = System.IO.Ports.Parity.Space;
-                    break;
-                default:
-                    sp1.Parity = System.IO.Ports.Parity.None;
-                    break;
-            }
-
-            //sp1.DataBits = 8;
-            sp1.DataBits = Databits;
-
-
-            switch (Stopbits)
-            {
-                case 0:
-                    sp1.StopBits = System.IO.Ports.StopBits.None;
-                    break;
-                case 1:
-                    sp1.StopBits = System.IO.Ports.StopBits.One;
-                    break;
-                case 2:
-                    sp1.StopBits = System.IO.Ports.StopBits.Two;
-                    break;
-                case 3:
-                    sp1.StopBits = System.IO.Ports.StopBits.OnePointFive;
-                    break;
-                default:
-                    sp1.StopBits = System.IO.Ports.StopBits.None;
-                    break;
-            }
-
-
-
-
-            Byte[] srcBuff_1 = new byte[] { 0x31, 0x33 };
-            secondTap = false;
-            try
-            {
-                sp1.Open();
-            }
-            catch (Exception e)
-            {
-                if (e is System.UnauthorizedAccessException)
-                {
-                    System.Console.WriteLine("Scanning " + sp1.PortName + " - Opening Port get Access Denied exception: " + e.Message);
-                }
-                else if (e is System.IO.IOException)
-                {
-                    System.Console.WriteLine("Scanning " + sp1.PortName + " - Opening Port get Port not exist exception: " + e.Message);
-                }
-                else
-                {
-                    System.Console.WriteLine("Scanning " + sp1.PortName + " - Opening Port get exception: " + e.Message);
-                }
-
-                return -2; //openerror
-            }
-            ArrayList data = new ArrayList();
-            sp1.WriteTimeout = WriteTimout;//500;
-
-            sp1.ReadTimeout = ReadTimeout;//2500;
-
-
-            try
-            {
-                sp1.Write(srcBuff_1, 0, srcBuff_1.Length);
-            }
-            catch (TimeoutException e)
-            {
-
-                System.Console.WriteLine("Scanning " + sp1.PortName + " - write data first try timeout: " + e.Message);
-                sp1.Close();
-                return -1;
-            }
-
-            byte dataresult;
-            dataresult = 0;
-            int counter = 0;
-            while (true)
-            {
-                try
-                {
-                    dataresult = (byte)sp1.ReadByte();
-
-                }
-                catch (System.TimeoutException e)
-                {
-
-                    if (counter == 0)
-                    {
-
-                        System.Console.WriteLine("Scanning " + sp1.PortName + " - read data first try timeout: " + e.Message);
-                        if (secondTap)
-                        {
-                            sp1.Close();
-                            return -1;
-                        }
-                        else
-                        {
-                            try
-                            {
-                                sp1.Write(srcBuff_1, 0, srcBuff_1.Length);
-                            }
-                            catch (TimeoutException ei)
-                            {
-                                System.Console.WriteLine("Scanning " + sp1.PortName + " - write data second try timeout: " + e.Message);
-                                sp1.Close();
-                                return -1;
-                            }
-                            secondTap = true;
-
-                        }
-
-
-                    }
-                    else
-                    {
-                        break;
-                    }
-
-                    continue;
-                }
-                data.Add(dataresult);
-                counter++;
-                if (counter >= 100)
-                {
-                    break;
-                }
-
 
             }
-            byte[] newdata = new byte[data.Count];
-            newdata = (byte[])data.ToArray(typeof(byte));
-            string s = System.Text.Encoding.Default.GetString(newdata);
+            returnvalue[6] = CRCSUM(returnvalue, 6);
 
-            s = s.ToLower();
-            System.Console.WriteLine("Scanning " + sp1.PortName + " - read data: " + s);
 
-            int index = s.IndexOf("device powered on", 0);
-
-            sp1.Close();
-
-            if (index >= 0)
-            {
-                System.Console.WriteLine("Scanning " + sp1.PortName + " succeed, port is: " + sp1.PortName);
-                return 0;
-            }
-
-            System.Console.WriteLine("Scanning " + sp1.PortName + " get unrecognized result: " + s);
-            return -3;
-
+            return returnvalue;
         }
     }
 }

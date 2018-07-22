@@ -14,9 +14,11 @@ namespace SPDisplay
     {
         private ProcessPort portctl;
         public Label[] labelArray;
+
         public Form1()
         {
             InitializeComponent();
+            timer1.Enabled = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -50,6 +52,28 @@ namespace SPDisplay
                 this.Controls.Add(labelArray[i]);
                 this.Controls.Add(labelArray[i+5]);
             }
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void 端口ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form2 form2 = new Form2();
+            form2.ShowDialog();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+           // portctl.switcher = !portctl.switcher;
+            timer1.Enabled = !timer1.Enabled;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            Console.WriteLine("timers");
         }
     }
 }
