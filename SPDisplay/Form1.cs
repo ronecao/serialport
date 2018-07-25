@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,18 +16,55 @@ namespace SPDisplay
     {
         private ProcessPort portctl;
         public Label[] labelArray;
+        private Sender sender1;
 
         public Form1()
         {
             InitializeComponent();
-            timer1.Enabled = true;
+            timer1.Enabled = false;
+            sender1 = new Sender();
+            sender1.initSerialPort("COM4", "115200", "none", "8", "1");
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            portctl = new ProcessPort(this);
-            
-            portctl.scan();
+            sender1.SendRequest(ProtocolControl.REQTYPE.DATA, new byte[] { 0x01, 0xef });
+            sender1.OpenPort();
+            //while (true) {
+            ArrayList a =sender1.Receivedata();
+           // }
+            sender1.ClosePort();
+
+            if (a != null) {
+                DrawItems(a);
+            }
+        }
+        private void DrawItems(ArrayList datalist) {
+            for (int i = 0; i < 100; i++) {
+                if (i % 2 == 0)
+                    chartForm2.L1Add(i, 1, i + ".01");
+                else
+                    chartForm2.L1Add(i, 0, i + ".01");
+
+                DataCell cell = (DataCell) datalist[i];
+                String v = Utils.HextString(cell.data, cell.datalength, true);
+                switch (cell.line) {
+                    case 0x32:
+                        chartForm2.L2Add(i, v);
+                        break;
+                    case 0x33:
+                        chartForm2.L3Add(i, v);
+                        break;
+                    case 0x34:
+                        chartForm2.L4Add(i, v);
+                        break;
+                    case 0x35:
+                        chartForm2.L5Add(i, v);
+                        break;
+
+
+                }
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -53,7 +91,21 @@ namespace SPDisplay
                 this.Controls.Add(labelArray[i]);
                 this.Controls.Add(labelArray[i+5]);
             }
-            
+            /*for (int i = 0; i < 100; i++) {
+                if (i % 2 == 0)
+                    chartForm2.L1Add(i, 1, i + ".01");
+                else
+                    chartForm2.L1Add(i, 0, i + ".01");
+                chartForm2.L2Add(i, "B1,C2 DF");
+                if (i % 3 == 0) {
+                    chartForm2.L3Add(i, "B6,C3");
+                }
+                
+                chartForm2.L4Add(i, "FF,00");
+                chartForm2.L5Add(i, "FF,FF");
+            }*/
+
+
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
@@ -103,6 +155,10 @@ namespace SPDisplay
                // paramList = File.ReadAllLines("port.txt");
             }
 
+
+        }
+
+        private void chartForm2_Load(object sender, EventArgs e) {
 
         }
     }

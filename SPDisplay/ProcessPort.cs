@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using static SPDisplay.Utils;
-
+using static SPDisplay.ProtocolControl;
 
 namespace SPDisplay
 {

@@ -46,6 +46,7 @@
             this.selectFileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.Dialog = new System.Windows.Forms.OpenFileDialog();
+            this.chartForm2 = new _5SeriesChart.ChartForm();
             this.toolStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -186,11 +187,21 @@
             // 
             this.Dialog.FileName = "openFileDialog1";
             // 
+            // chartForm2
+            // 
+            this.chartForm2.Location = new System.Drawing.Point(0, 111);
+            this.chartForm2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chartForm2.Name = "chartForm2";
+            this.chartForm2.Size = new System.Drawing.Size(902, 255);
+            this.chartForm2.TabIndex = 5;
+            this.chartForm2.Load += new System.EventHandler(this.chartForm2_Load);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(915, 545);
+            this.Controls.Add(this.chartForm2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.toolStrip1);
@@ -227,6 +238,8 @@
         private System.Windows.Forms.ToolStripMenuItem 更新ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectFileMenuItem;
         private System.Windows.Forms.OpenFileDialog Dialog;
+
+        private _5SeriesChart.ChartForm chartForm2;
     }
 }
 

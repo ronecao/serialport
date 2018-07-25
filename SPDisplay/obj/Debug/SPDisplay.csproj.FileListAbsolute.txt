@@ -1,0 +1,13 @@
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\bin\Debug\SPDisplay.exe.config
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\bin\Debug\SPDisplay.exe
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\bin\Debug\SPDisplay.pdb
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.csprojAssemblyReference.cache
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.Form1.resources
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.Form2.resources
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.Properties.Resources.resources
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.csproj.GenerateResource.cache
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.csproj.CoreCompileInputs.cache
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.exe
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.pdb
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\bin\Debug\5SeriesChart.dll
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.csproj.CopyComplete

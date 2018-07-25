@@ -6,19 +6,17 @@ using System.Threading.Tasks;
 
 namespace SPDisplay
 {
-    class Utils{
+    class Utils {
         public static String[] paramList;
         public static String[] port;
-        public enum REQTYPE { ERROR, FIND,DATA};
-        public static void dumpdata(byte[] b, int length, String title)
-        {
+        public static Random utilsrandom = new Random();
+
+        public static void dumpdata(byte[] b, int length, String title) {
             Console.WriteLine(title + "lengght" + length);
-            for (int i = 0; i < length; i++)
-            {
+            for (int i = 0; i < length; i++) {
                 Console.Write(b[i].ToString("X2"));
                 Console.Write(" ");
-                if ((i + 1) % 16 == 0)
-                {
+                if ((i + 1) % 16 == 0) {
                     Console.WriteLine(" ");
                 }
 
@@ -28,9 +26,31 @@ namespace SPDisplay
         public static byte CRCSUM(byte[] data, int length) {
             byte result = 0x00;
             for (int i = 0; i < length; i++) {
-                result =(byte) (result + data[i]);
+                result = (byte)(result + data[i]);
             }
             return result;
+        }
+        public static byte[] getRadomByte() {
+
+            int n = utilsrandom.Next(0, 268465455);
+            byte[] d = BitConverter.GetBytes(n);
+            byte[] ret = new byte[4];
+            ret[0] = d[3];
+            ret[1] = d[2];
+            ret[2] = d[1];
+            ret[3] = d[0];
+            return ret;
+        }
+
+        public static String HextString(byte[] b, int length, Boolean spac) {
+            String ret = "";
+            for (int i = 0; i < length; i++) {
+                ret = ret + b[i].ToString("X2");
+                if (spac) {
+                    ret = ret + " ";
+                }
+            }
+            return ret;
         }
     }
 }
