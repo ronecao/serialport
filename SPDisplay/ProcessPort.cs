@@ -431,5 +431,36 @@ namespace SPDisplay
 
             return returnvalue;
         }
+
+        public byte[] packupload(byte[] data, int datalenght) {
+            byte[] value = new byte[12 + datalenght];
+
+            byte[] intBuff = BitConverter.GetBytes(datalenght); // 将 int 转换成字节数组
+            Utils.dumpdata(intBuff, 4, "int123");
+            value[0] = 0x81;
+            value[1] = 0x06;
+            value[2] = 0x09;
+            value[3] = 0x36;
+            value[4] = intBuff[3];
+            value[5] = intBuff[2];
+            value[6] = intBuff[1];
+            value[7] = intBuff[0];
+            int counter = 7;
+            counter++;
+            for (int i = 0; i<datalenght; i++ ) {
+                value[i+counter] = data[i];
+            }
+            counter = counter + datalenght;
+            value[counter] = CRCSUM(value, counter);
+            counter++;
+            value[counter] = 0x00;
+            counter++;
+            value[counter] = 0xff;
+            counter++;
+            value[counter] = 0xff;
+            counter++;
+
+            return value;
+        }
     }
 }

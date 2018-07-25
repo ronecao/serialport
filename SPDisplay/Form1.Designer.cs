@@ -42,8 +42,10 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.端口ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.更新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectFileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.Dialog = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -136,7 +138,8 @@
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.设置ToolStripMenuItem});
+            this.设置ToolStripMenuItem,
+            this.更新ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(915, 28);
@@ -154,15 +157,34 @@
             // 端口ToolStripMenuItem
             // 
             this.端口ToolStripMenuItem.Name = "端口ToolStripMenuItem";
-            this.端口ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.端口ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.端口ToolStripMenuItem.Text = "端口";
             this.端口ToolStripMenuItem.Click += new System.EventHandler(this.端口ToolStripMenuItem_Click);
+            // 
+            // 更新ToolStripMenuItem
+            // 
+            this.更新ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectFileMenuItem});
+            this.更新ToolStripMenuItem.Name = "更新ToolStripMenuItem";
+            this.更新ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
+            this.更新ToolStripMenuItem.Text = "更新";
+            // 
+            // selectFileMenuItem
+            // 
+            this.selectFileMenuItem.Name = "selectFileMenuItem";
+            this.selectFileMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.selectFileMenuItem.Text = "选择文件";
+            this.selectFileMenuItem.Click += new System.EventHandler(this.selectFileMenuItem_Click);
             // 
             // timer1
             // 
             this.timer1.Enabled = true;
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // Dialog
+            // 
+            this.Dialog.FileName = "openFileDialog1";
             // 
             // Form1
             // 
@@ -201,8 +223,10 @@
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 端口ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem1;
-        private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ToolStripMenuItem 更新ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectFileMenuItem;
+        private System.Windows.Forms.OpenFileDialog Dialog;
     }
 }
 

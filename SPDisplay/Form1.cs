@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +53,7 @@ namespace SPDisplay
                 this.Controls.Add(labelArray[i]);
                 this.Controls.Add(labelArray[i+5]);
             }
+            
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
@@ -74,6 +76,34 @@ namespace SPDisplay
         private void timer1_Tick(object sender, EventArgs e)
         {
             Console.WriteLine("timers");
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void selectFileMenuItem_Click(object sender, EventArgs e)
+        {
+            
+            if (Dialog.ShowDialog() == DialogResult.OK)
+            {
+                byte[] dd = new byte[1024 * 1024 * 2];
+                String fName = Dialog.FileName;
+                FileStream fs1 = new FileStream(fName, FileMode.Open);
+                fs1.Read(dd, 0, dd.Length);
+                Utils.dumpdata(dd, 100, "readbyt");
+                portctl = new ProcessPort(this);
+                byte[] v= portctl.packupload(dd, 100);
+                Utils.dumpdata(v, v.Length, "vvalue");
+                /*byte[] data = new UTF8Encoding().GetBytes("COM1\r\n115200\r\nnull\r\n8\r\n1\r\n");
+                fs1.Write(data, 0, data.Length);
+                fs1.Flush();*/
+                fs1.Close();
+               // paramList = File.ReadAllLines("port.txt");
+            }
+
+
         }
     }
 }
