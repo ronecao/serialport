@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataCell.cs" />
     <Compile Include="ProtocolControl.cs" />
     <Compile Include="SerialPortControl.cs" />
     <Compile Include="Utils.cs" />

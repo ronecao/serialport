@@ -16,6 +16,7 @@ namespace SPDisplay
             sp1 = new SerialPortControl( name,  baudratestr,  paritystr,  databitstr, stopbitstr);
 		}
         public int OpenPort() {
+            
             return sp1.OpenPort();
         }
         public void ClosePort() {
@@ -27,16 +28,42 @@ namespace SPDisplay
             int packagestatus = -1;
             ReceiverRest();
             int recvresult;
-
+            int readStatus = -4;
+            byte[] result;
+           
+            /*result =sp1.Read( out recvresult);
+            Console.WriteLine("recvlenght" + recvresult +"buffersize"+ sp1.sp1.ReadBufferSize);
+            return null;*/
 
             while (true)
             {
-                
-				if (sp1.ReadByte(out dataresult) == 0) {
+                /* dataresult = sp1.ReadByte(out readStatus);
+                 if (readStatus == RECVSUCC) {
+                     recvresult = SaveReceiverData(dataresult);
+                 }
+                 else {
+                     Console.WriteLine("readStatus" + readStatus);
+                     break; 
+                 }*/
+                try {
+                    dataresult = (byte)sp1.sp1.ReadByte();
+                    recvresult = SaveReceiverData(dataresult);
+                }
+                catch (Exception e) {
+                    Console.WriteLine("readStatus" + e.ToString());
+                    break;
+
+                }
+               
+
+                /*if (sp1.ReadByte(out dataresult) == 0) {
 					recvresult = SaveReceiverData(dataresult);
 				}else {
                     break;
-                }
+                }*/
+
+             
+                
                 
                 switch (recvresult)
                 {
@@ -51,7 +78,10 @@ namespace SPDisplay
                         Console.WriteLine("收到垃圾数据");
                         break;
                     case 0:
-                        Console.WriteLine("收到数据");
+                        //Console.WriteLine("收到数据");
+                        break;
+                    default:
+                        Console.WriteLine("UNKOWN");
                         break;
 
                 }
@@ -88,11 +118,9 @@ namespace SPDisplay
 
         public int SendRequest(REQTYPE type, byte[] value) {
            byte[] request =  Packrequest(type, value);
-            if (OpenPort() != 0) {
-                return -1;
-            }
+           
            int i= SendData(request);
-            sp1.ClosePort();
+            //sp1.ClosePort();
 
             return i;
         }

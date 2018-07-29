@@ -52,5 +52,9 @@ namespace SPDisplay
             }
             return ret;
         }
+
+        public static byte getbitValue(byte invalue, byte bitadd) {
+           return (byte)((byte)(invalue << (bitadd)) >> 7);
+        }
     }
 }

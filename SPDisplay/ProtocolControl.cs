@@ -48,33 +48,45 @@ namespace SPDisplay {
             int datalength = 0;
 
             ArrayList datavalue = new ArrayList();
-
+            dumpdata(data, length, "recev");
+            //Console.WriteLine("unpacking***************");
+            String log = "";
             for (int i = 5; i < length - 10; i++) {
                 line = data[i];
                 DataCell cell = new DataCell();
                 cell.line = line;
+               
                 Console.WriteLine("Line=" + data[i]);
                 i++;
+                log = data[i].ToString("X2");
                 loc = loc + data[i] * 256 * 256 * 256;
                 i++;
+                log = log + data[i].ToString("X2");
                 loc = loc + data[i] * 256 * 256;
                 i++;
+                log = log + data[i].ToString("X2");
                 loc = loc + data[i] * 256;
                 i++;
+                log = log + data[i].ToString("X2");
                 loc = loc + data[i];
                 i++;
+                Console.WriteLine("location:" + log);
                 Console.WriteLine("location:" + loc);
                 cell.address = loc;
-
+                log = data[i].ToString("X2");
                 datalength = datalength + data[i] * 256 * 256 * 256;
                 i++;
+                log = log + data[i].ToString("X2");
                 datalength = datalength + data[i] * 256 * 256;
                 i++;
+                log = log + data[i].ToString("X2");
                 datalength = datalength + data[i] * 256;
                 i++;
+                log = log + data[i].ToString("X2");
                 datalength = datalength + data[i];
                 i++;
                 cell.datalength = datalength;
+                Console.WriteLine("datalengt:"+log);
                 Console.WriteLine("datalenght" + datalength);
                 int c = i;
                 int j = 0;
@@ -89,6 +101,7 @@ namespace SPDisplay {
                         Console.WriteLine(" ");
                     }
                     cell.data[j] = data[i];
+                    j++;
                 }
                 Console.WriteLine(" ");
                 datavalue.Add(cell);
@@ -290,7 +303,7 @@ namespace SPDisplay {
         public static int SaveReceiverData(byte datain) {
             //当首字符不是0xff 非法数据丢
             if (downRecvDataCounter == 0 && datain != 0xff) {
-                Console.WriteLine("数据非法丢弃");
+                Console.WriteLine("数据非法丢弃"+datain.ToString("X2"));
                 return RECVTRACH;
             }
             downRecvData.Add(datain);

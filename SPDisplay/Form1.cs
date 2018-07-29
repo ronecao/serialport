@@ -17,53 +17,93 @@ namespace SPDisplay
         private ProcessPort portctl;
         public Label[] labelArray;
         private Sender sender1;
+        private static String[] paramList;
 
         public Form1()
         {
             InitializeComponent();
             timer1.Enabled = false;
             sender1 = new Sender();
-            sender1.initSerialPort("COM4", "115200", "none", "8", "1");
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            sender1.SendRequest(ProtocolControl.REQTYPE.DATA, new byte[] { 0x01, 0xef });
-            sender1.OpenPort();
-            //while (true) {
-            ArrayList a =sender1.Receivedata();
-           // }
-            sender1.ClosePort();
-
-            if (a != null) {
-                DrawItems(a);
+            loadFile();
+            try {
+                sender1.initSerialPort(paramList[0], paramList[1], paramList[2], paramList[3], paramList[4]);
             }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+            
         }
+
         private void DrawItems(ArrayList datalist) {
-            for (int i = 0; i < 100; i++) {
-                if (i % 2 == 0)
+            for (int i = 0; i < datalist.Count; i++) {
+                /*if (i % 2 == 0)
                     chartForm2.L1Add(i, 1, i + ".01");
                 else
                     chartForm2.L1Add(i, 0, i + ".01");
+                chartForm2.L2Add(i, "00 00 00 01");
+                chartForm2.L3Add(i, "00 00 00 02");
+                chartForm2.L4Add(i, "00 00 00 03");
+                chartForm2.L5Add(i, "00 00 00 04");*/
 
                 DataCell cell = (DataCell) datalist[i];
                 String v = Utils.HextString(cell.data, cell.datalength, true);
                 switch (cell.line) {
+                    case 0x31:
+                        //cell.data[3] = 0x03;
+                        for (int j = 0; j < cell.datalength; j++) {
+                            DrawLine(cell.address,j,cell.datalength,cell.data[j]);
+                        }
+                        
+
+
+                        Console.WriteLine("Line1 address"+cell.address);
+                        break;
                     case 0x32:
-                        chartForm2.L2Add(i, v);
+                        chartForm2.L2Add(cell.address, v);
+                        Console.WriteLine("Line2 address" + cell.address);
                         break;
                     case 0x33:
-                        chartForm2.L3Add(i, v);
+                        chartForm2.L3Add(cell.address, v);
+                        Console.WriteLine("Line3 address" + cell.address);
                         break;
                     case 0x34:
-                        chartForm2.L4Add(i, v);
+                        chartForm2.L4Add(cell.address, v);
+                        Console.WriteLine("Line4 address" + cell.address);
                         break;
                     case 0x35:
-                        chartForm2.L5Add(i, v);
+                        chartForm2.L5Add(cell.address, v);
+                        Console.WriteLine("Line5 address" + cell.address);
                         break;
 
 
                 }
+            }
+        }
+        /*
+         * start, column number,
+         * loc, byte loc in column
+         * datalength total lungth;
+         */
+        public void DrawLine(int start,int loc,int datalength, byte value) {
+            double xgap = 1.00 / (datalength*8*2);
+            double x;
+            for (int i = 0; i < 16; i++) {
+                // byte j = (byte)((byte)(k << (7 - i))>>7);
+                byte j = Utils.getbitValue(value, (byte)(i/2));
+
+
+                x = start + loc * 16.0*xgap + (i) * xgap;
+                chartForm2.L1Add(x, j, "value");
+                Console.WriteLine(">>:" + i.ToString() + "值:" + j + "dboult:" + x);
+
+                i++;
+                x = start + loc * 16 * xgap + (i) * xgap;
+                if (j == 0x01) {
+                    j = 0x00;
+                }
+                chartForm2.L1Add(x, j, "value");
+                Console.WriteLine(">>:" + i.ToString() + "值:" + j + "dboult:" + x);
+
             }
         }
 
@@ -71,7 +111,18 @@ namespace SPDisplay
         {
             //test
             labelArray = new System.Windows.Forms.Label[10];
-            for (int i = 0; i < labelArray.Length/2; i++)
+            byte k = 0x11;
+            Console.WriteLine("value" + ((byte)(k << 3)>>7));
+
+            k = 0x01;
+            for (int i = 0; i < 8; i++) {
+                byte j = Utils.getbitValue(k, (byte)i);
+                Console.WriteLine("ddddd" + j);
+            } 
+
+            //DrawLine(1, 0, 4, 0xfe);
+
+            /*for (int i = 0; i < labelArray.Length/2; i++)
             {
                 labelArray[i] = new System.Windows.Forms.Label();
                 labelArray[i].AutoSize = true;
@@ -90,7 +141,7 @@ namespace SPDisplay
                 labelArray[i + 5].Text = "label"+(i+5);
                 this.Controls.Add(labelArray[i]);
                 this.Controls.Add(labelArray[i+5]);
-            }
+            }*/
             /*for (int i = 0; i < 100; i++) {
                 if (i % 2 == 0)
                     chartForm2.L1Add(i, 1, i + ".01");
@@ -115,14 +166,27 @@ namespace SPDisplay
 
         private void 端口ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form2 form2 = new Form2();
-            form2.ShowDialog();
+
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-           // portctl.switcher = !portctl.switcher;
-            timer1.Enabled = !timer1.Enabled;
+            while (true) {
+                int ret = sender1.OpenPort();
+                if (ret != 0) {
+                    return;
+                }
+                sender1.SendRequest(ProtocolControl.REQTYPE.DATA, new byte[] { 0x01, 0x4f });
+
+                //while (true) {
+                ArrayList a = sender1.Receivedata();
+                // }
+                sender1.ClosePort();
+            }
+           
+
+            // portctl.switcher = !portctl.switcher;
+            //timer1.Enabled = !timer1.Enabled;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -160,6 +224,67 @@ namespace SPDisplay
 
         private void chartForm2_Load(object sender, EventArgs e) {
 
+        }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
+
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e) {
+
+            int ret = sender1.OpenPort();
+            if (ret != 0) {
+                return;
+            }
+            toolStripButton1.Enabled = false;
+
+
+            sender1.SendRequest(ProtocolControl.REQTYPE.DATA, new byte[] { 0x01, 0x4f });
+
+            //while (true) {
+            ArrayList a = sender1.Receivedata();
+            // }
+            sender1.ClosePort();
+            toolStripButton1.Enabled = true;
+
+            if (a != null) {
+                DrawItems(a);
+            }
+        }
+
+        private void 设置硬件参数ToolStripMenuItem_Click(object sender, EventArgs e) {
+            Form2 form2 = new Form2();
+            form2.ShowDialog();
+            loadFile();
+            sender1.initSerialPort(paramList[0], paramList[1], paramList[2], paramList[3], paramList[4]);
+        }
+
+        private void loadFile() {
+
+            if (File.Exists("Port.txt")) {
+                //8string readText = File.ReadAllText("open.txt");  //读取的结果包含了\r\n
+                paramList = File.ReadAllLines("port.txt");
+            }
+            else {
+                FileStream fs1 = new FileStream("port.txt", FileMode.OpenOrCreate);
+                byte[] data = new UTF8Encoding().GetBytes("COM1\r\n115200\r\nnone\r\n8\r\n1\r\n");
+                fs1.Write(data, 0, data.Length);
+                fs1.Flush();
+                fs1.Close();
+                paramList = File.ReadAllLines("port.txt");
+            }
+        }
+        private void saveFile() {
+            FileStream fs1 = new FileStream("port.txt", FileMode.OpenOrCreate);
+            String fileContent = "";
+            foreach (String content in paramList) {
+                fileContent = fileContent + content + "\r\n";
+            }
+            byte[] data = new UTF8Encoding().GetBytes(fileContent);
+            fs1.Write(data, 0, data.Length);
+            fs1.Flush();
+            fs1.Close();
+            paramList = File.ReadAllLines("port.txt");
         }
     }
 }

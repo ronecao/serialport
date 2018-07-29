@@ -35,10 +35,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.saveBtn = new System.Windows.Forms.Button();
             this.databitText = new System.Windows.Forms.TextBox();
-            this.checkText = new System.Windows.Forms.TextBox();
             this.brateText = new System.Windows.Forms.TextBox();
-            this.stopbitText = new System.Windows.Forms.TextBox();
             this.portlistCombo = new System.Windows.Forms.ComboBox();
+            this.stopBitCombo = new System.Windows.Forms.ComboBox();
+            this.PairtyCombo = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -105,14 +105,6 @@
             this.databitText.TabIndex = 7;
             this.databitText.TextChanged += new System.EventHandler(this.databitText_TextChanged);
             // 
-            // checkText
-            // 
-            this.checkText.Location = new System.Drawing.Point(110, 139);
-            this.checkText.Name = "checkText";
-            this.checkText.Size = new System.Drawing.Size(157, 25);
-            this.checkText.TabIndex = 8;
-            this.checkText.TextChanged += new System.EventHandler(this.checkText_TextChanged);
-            // 
             // brateText
             // 
             this.brateText.Location = new System.Drawing.Point(110, 98);
@@ -120,14 +112,6 @@
             this.brateText.Size = new System.Drawing.Size(157, 25);
             this.brateText.TabIndex = 9;
             this.brateText.TextChanged += new System.EventHandler(this.brateText_TextChanged);
-            // 
-            // stopbitText
-            // 
-            this.stopbitText.Location = new System.Drawing.Point(110, 211);
-            this.stopbitText.Name = "stopbitText";
-            this.stopbitText.Size = new System.Drawing.Size(157, 25);
-            this.stopbitText.TabIndex = 10;
-            this.stopbitText.TextChanged += new System.EventHandler(this.stopbitText_TextChanged);
             // 
             // portlistCombo
             // 
@@ -138,15 +122,43 @@
             this.portlistCombo.TabIndex = 11;
             this.portlistCombo.SelectedIndexChanged += new System.EventHandler(this.portlistCombo_SelectedIndexChanged);
             // 
+            // stopBitCombo
+            // 
+            this.stopBitCombo.FormattingEnabled = true;
+            this.stopBitCombo.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "1.5"});
+            this.stopBitCombo.Location = new System.Drawing.Point(110, 214);
+            this.stopBitCombo.Name = "stopBitCombo";
+            this.stopBitCombo.Size = new System.Drawing.Size(157, 23);
+            this.stopBitCombo.TabIndex = 12;
+            this.stopBitCombo.SelectedIndexChanged += new System.EventHandler(this.stopBitCombo_SelectedIndexChanged);
+            // 
+            // PairtyCombo
+            // 
+            this.PairtyCombo.FormattingEnabled = true;
+            this.PairtyCombo.Items.AddRange(new object[] {
+            "none",
+            "even",
+            "odd",
+            "mark",
+            "space"});
+            this.PairtyCombo.Location = new System.Drawing.Point(110, 136);
+            this.PairtyCombo.Name = "PairtyCombo";
+            this.PairtyCombo.Size = new System.Drawing.Size(157, 23);
+            this.PairtyCombo.TabIndex = 13;
+            this.PairtyCombo.SelectedIndexChanged += new System.EventHandler(this.PairtyCombo_SelectedIndexChanged);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(349, 387);
+            this.Controls.Add(this.PairtyCombo);
+            this.Controls.Add(this.stopBitCombo);
             this.Controls.Add(this.portlistCombo);
-            this.Controls.Add(this.stopbitText);
             this.Controls.Add(this.brateText);
-            this.Controls.Add(this.checkText);
             this.Controls.Add(this.databitText);
             this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.label5);
@@ -171,9 +183,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button saveBtn;
         private System.Windows.Forms.TextBox databitText;
-        private System.Windows.Forms.TextBox checkText;
         private System.Windows.Forms.TextBox brateText;
-        private System.Windows.Forms.TextBox stopbitText;
         private System.Windows.Forms.ComboBox portlistCombo;
+        private System.Windows.Forms.ComboBox stopBitCombo;
+        private System.Windows.Forms.ComboBox PairtyCombo;
     }
 }

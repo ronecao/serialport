@@ -57,9 +57,44 @@ namespace SPDisplay
             }
 
             brateText.Text = paramList[1];
-            checkText.Text = paramList[2];
+            //checkText.Text = paramList[2];
+            switch (paramList[2]) {
+                case "none":
+                    PairtyCombo.SelectedIndex = 0;
+                    break;
+                case "even":
+                    PairtyCombo.SelectedIndex = 1;
+                    break;
+                case "odd":
+                    PairtyCombo.SelectedIndex = 2;
+                    break;
+                case "mark":
+                    PairtyCombo.SelectedIndex = 3;
+                    break;
+                case "space":
+                    PairtyCombo.SelectedIndex = 4;
+                    break;
+                default:
+                    PairtyCombo.SelectedIndex = 0;
+                    break;
+            }
+
             databitText.Text = paramList[3];
-            stopbitText.Text = paramList[4];
+            //stopbitText.Text = paramList[4];
+            switch (paramList[4]) {
+                case "1":
+                    stopBitCombo.SelectedIndex = 0;
+                    break;
+                case "2":
+                    stopBitCombo.SelectedIndex = 1;
+                    break;
+                case "3":
+                    stopBitCombo.SelectedIndex = 2;
+                    break;
+                default:
+                    stopBitCombo.SelectedIndex = 0;
+                    break;
+            }
             formload = false;
 
             
@@ -107,19 +142,51 @@ namespace SPDisplay
             
         }
 
-        private void checkText_TextChanged(object sender, EventArgs e)
-        {
-            paramList[2] = checkText.Text;
-        }
 
         private void databitText_TextChanged(object sender, EventArgs e)
         {
             paramList[3] = databitText.Text;
         }
 
-        private void stopbitText_TextChanged(object sender, EventArgs e)
-        {
-            paramList[4] = stopbitText.Text;
+        private void PairtyCombo_SelectedIndexChanged(object sender, EventArgs e) {
+            if (!formload) {
+                switch (PairtyCombo.SelectedIndex) {
+                    case 0:
+                        paramList[2] = "none";
+                        break;
+                    case 1:
+                        paramList[2] = "even";
+                        break;
+                    case 2:
+                        paramList[2] = "odd";
+                        break;
+                    case 3:
+                        paramList[2] = "mark";
+                        break;
+                    case 4:
+                        paramList[2] = "space";
+                        break;
+                    default:
+                        paramList[2] = "none";
+                        break;
+                }
+                
+            }
+        }
+
+        private void stopBitCombo_SelectedIndexChanged(object sender, EventArgs e) {
+            switch (stopBitCombo.SelectedIndex) {
+                case 0:
+                    paramList[4] = "1";//1
+                    break;
+                case 1:
+                    paramList[4] = "2";//2
+                    break;
+                case 2:
+                    paramList[4] = "3";//1.5
+                    break;
+               
+            }
         }
     }
 }

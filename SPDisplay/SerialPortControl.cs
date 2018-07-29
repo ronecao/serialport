@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
+using System.Collections;
 
 namespace SPDisplay {
     class SerialPortControl {
         private readonly int SUCC = 0;
-        private SerialPort sp1;
+        public SerialPort sp1;
         public SerialPortControl(String name, String baudratestr, String paritystr, String databitstr, String stopbitstr) {
             sp1 = new SerialPort();
             sp1.PortName = name;
@@ -51,13 +52,16 @@ namespace SPDisplay {
                     break;
             }
             sp1.DataBits = int.Parse(databitstr);
-            sp1.ReadTimeout = 5000;
+            sp1.ReadTimeout = 25000;
             sp1.WriteTimeout = 1000;
+            sp1.ReadBufferSize = 1024 * 1024 * 8;
         }
 
         public int OpenPort() {
             try {
                 sp1.Open();
+                sp1.DiscardInBuffer();
+                sp1.DiscardOutBuffer();
             }
             catch (Exception e) {
                 if (e is System.UnauthorizedAccessException) {
@@ -75,25 +79,50 @@ namespace SPDisplay {
             }
             return SUCC;
         }
-        public int ReadByte(out byte dataout ) {
+        public byte ReadByte(out int dataout ) {
+            byte ret=0xff;
             try {
-              dataout = (byte)sp1.ReadByte();
-                return SUCC;
+                ret = (byte)sp1.ReadByte();
+                dataout = SUCC;
+                return ret;
             } catch (Exception e) {
                 dataout = 0xff;
                 if (e is System.InvalidOperationException) {
                     System.Console.WriteLine("Scanning " + sp1.PortName + " :"+ e.Message);
-                    return -1;
+                    dataout = -1;
                 }
                 else if (e is System.TimeoutException) {
                     System.Console.WriteLine("Scanning " + sp1.PortName + ": " + e.Message);
-                    return -2;
+                    dataout = -2;
                 }
                 else {
                     System.Console.WriteLine("Scanning " + sp1.PortName + ": " + e.Message);
-                    return -3;
+                    dataout = -2;
                 }
             }
+            return ret;
+        }
+
+        public byte[] Read(out int datalength) {
+            byte ret;
+            ArrayList a = new ArrayList();
+            while (true)
+            try {
+                    ret = (byte)sp1.ReadByte();
+                    a.Add(ret);  
+
+                }
+            catch (Exception e) {
+                    if (a != null && a.Count > 0) {
+                        datalength = a.Count;
+                        return (byte[])a.ToArray(typeof(byte));
+                    }
+                    else {
+                        Console.WriteLine(e.ToString());
+                    }
+                    
+             }
+
         }
         public int WriteData(byte[] data, int length) {
             try {
