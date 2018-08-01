@@ -52,7 +52,7 @@ namespace SPDisplay {
                     break;
             }
             sp1.DataBits = int.Parse(databitstr);
-            sp1.ReadTimeout = 25000;
+            sp1.ReadTimeout = 500;
             sp1.WriteTimeout = 1000;
             sp1.ReadBufferSize = 1024 * 1024 * 8;
         }

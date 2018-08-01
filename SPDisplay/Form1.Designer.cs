@@ -60,6 +60,7 @@
             this.chartForm2 = new _5SeriesChart.ChartForm();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripReceivedBytesLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -221,7 +222,7 @@
             // 设置硬件参数ToolStripMenuItem
             // 
             this.设置硬件参数ToolStripMenuItem.Name = "设置硬件参数ToolStripMenuItem";
-            this.设置硬件参数ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.设置硬件参数ToolStripMenuItem.Size = new System.Drawing.Size(174, 26);
             this.设置硬件参数ToolStripMenuItem.Text = "设置硬件参数";
             this.设置硬件参数ToolStripMenuItem.Click += new System.EventHandler(this.设置硬件参数ToolStripMenuItem_Click);
             // 
@@ -290,7 +291,8 @@
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabel1,
+            this.toolStripReceivedBytesLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 520);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(915, 25);
@@ -300,8 +302,14 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(167, 20);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(80, 20);
+            this.toolStripStatusLabel1.Text = "Received:";
+            // 
+            // toolStripReceivedBytesLabel
+            // 
+            this.toolStripReceivedBytesLabel.Name = "toolStripReceivedBytesLabel";
+            this.toolStripReceivedBytesLabel.Size = new System.Drawing.Size(115, 20);
+            this.toolStripReceivedBytesLabel.Text = "ReceivedBytes";
             // 
             // Form1
             // 
@@ -361,6 +369,7 @@
         private System.Windows.Forms.ToolStripMenuItem 关于软件ToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripReceivedBytesLabel;
     }
 }
 

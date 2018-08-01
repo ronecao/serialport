@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,11 @@ namespace SPDisplay {
 
         public static int downRecvDataCounter = 0;
         public static ArrayList downRecvData = new ArrayList();
+        public static int downTailCounter = 0;
+        public static ArrayList downTailData = new ArrayList(10);
+
+
+
 
         /*
          * 重置receiver数据
@@ -30,7 +36,10 @@ namespace SPDisplay {
         public static void ReceiverRest() {
             downRecvData = new ArrayList();
             downRecvDataCounter = 0;
-        }
+
+            downTailCounter = 0;
+            downTailData = new ArrayList(10);
+    }
         /*
          * 重置sender数据
          */
@@ -48,7 +57,7 @@ namespace SPDisplay {
             int datalength = 0;
 
             ArrayList datavalue = new ArrayList();
-            dumpdata(data, length, "recev");
+            //dumpdata(data, length, "recev");
             //Console.WriteLine("unpacking***************");
             String log = "";
             for (int i = 5; i < length - 10; i++) {
@@ -56,7 +65,7 @@ namespace SPDisplay {
                 DataCell cell = new DataCell();
                 cell.line = line;
                
-                Console.WriteLine("Line=" + data[i]);
+                //Console.WriteLine("Line=" + data[i]);
                 i++;
                 log = data[i].ToString("X2");
                 loc = loc + data[i] * 256 * 256 * 256;
@@ -70,8 +79,8 @@ namespace SPDisplay {
                 log = log + data[i].ToString("X2");
                 loc = loc + data[i];
                 i++;
-                Console.WriteLine("location:" + log);
-                Console.WriteLine("location:" + loc);
+                //Console.WriteLine("location:" + log);
+                //Console.WriteLine("location:" + loc);
                 cell.address = loc;
                 log = data[i].ToString("X2");
                 datalength = datalength + data[i] * 256 * 256 * 256;
@@ -86,31 +95,31 @@ namespace SPDisplay {
                 datalength = datalength + data[i];
                 i++;
                 cell.datalength = datalength;
-                Console.WriteLine("datalengt:"+log);
-                Console.WriteLine("datalenght" + datalength);
+                //Console.WriteLine("datalengt:"+log);
+               // Console.WriteLine("datalenght" + datalength);
                 int c = i;
                 int j = 0;
                 cell.data = new byte[datalength];
                 String valuestr = " ";
                 for (; i < c + datalength; i++) {
-                    Console.Write(data[i].ToString("X2"));
+                    //Console.Write(data[i].ToString("X2"));
 
-                    Console.Write(" ");
+                   // Console.Write(" ");
                     valuestr = valuestr + data[i].ToString("X2") + " ";
                     if ((i + 1) % 16 == 0) {
-                        Console.WriteLine(" ");
+                       // Console.WriteLine(" ");
                     }
                     cell.data[j] = data[i];
                     j++;
                 }
-                Console.WriteLine(" ");
+                //Console.WriteLine(" ");
                 datavalue.Add(cell);
                 //showvalue(line, loc, valuestr);
 
-                Console.WriteLine("CRC1" + data[i].ToString("X2"));
+               // Console.WriteLine("CRC1" + data[i].ToString("X2"));
                 i++;
                 i = i + 2;
-                Console.WriteLine("******************************" + i);
+                //Console.WriteLine("******************************" + i);
                 datalength = 0;
                 loc = 0;
             }
@@ -301,13 +310,18 @@ namespace SPDisplay {
         }
 
         public static int SaveReceiverData(byte datain) {
+           
             //当首字符不是0xff 非法数据丢
             if (downRecvDataCounter == 0 && datain != 0xff) {
                 Console.WriteLine("数据非法丢弃"+datain.ToString("X2"));
                 return RECVTRACH;
             }
+
+
+           
             downRecvData.Add(datain);
             downRecvDataCounter++;
+            
             if (downRecvDataCounter == 5) {
                 byte[] temp = new byte[downRecvData.Count];
                 temp = (byte[])downRecvData.ToArray(typeof(byte));
@@ -323,19 +337,26 @@ namespace SPDisplay {
                     downRecvDataCounter--;
                 }
             }
-            if (downRecvDataCounter >= 15) {
-                byte[] temp = new byte[downRecvData.Count];
-                temp = (byte[])downRecvData.ToArray(typeof(byte));
-                if (temp[downRecvDataCounter - 10] == 0xff && temp[downRecvDataCounter - 9] == 0xff && temp[downRecvDataCounter - 8] == 0x87 && temp[downRecvDataCounter - 7] == 0x7e && temp[downRecvDataCounter - 6] == 0x29 &&
-                temp[downRecvDataCounter - 5] == 0x36 && temp[downRecvDataCounter - 4] == 0x00 && temp[downRecvDataCounter - 3] == 0x00 && temp[downRecvDataCounter - 2] == 0xff && temp[downRecvDataCounter - 1] == 0xff) {
-
+            
+            
+            downTailData.Add(datain);
+            downTailCounter++;
+            if (downTailCounter == 10) {
+                byte[] key = new byte[] { 0xff, 0xff, 0x87, 0x7e, 0x29, 0x36, 0x00, 0x00, 0xff, 0xff };
+                byte[] values = (byte[])downTailData.ToArray(typeof(byte));
+                if (SameArray(values, key)) {
                     Console.WriteLine("找到结尾了");
                     return RECVEND;
-
                 }
-
+                else {
+                    downTailData.RemoveAt(0);
+                    downTailCounter--;
+                }
             }
             return RECVSUCC;
         }
+
     }
+   
+
 }

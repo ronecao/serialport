@@ -99,6 +99,7 @@
             // 
             // databitText
             // 
+            this.databitText.Enabled = false;
             this.databitText.Location = new System.Drawing.Point(110, 174);
             this.databitText.Name = "databitText";
             this.databitText.Size = new System.Drawing.Size(157, 25);
@@ -107,6 +108,7 @@
             // 
             // brateText
             // 
+            this.brateText.Enabled = false;
             this.brateText.Location = new System.Drawing.Point(110, 98);
             this.brateText.Name = "brateText";
             this.brateText.Size = new System.Drawing.Size(157, 25);
@@ -124,6 +126,7 @@
             // 
             // stopBitCombo
             // 
+            this.stopBitCombo.Enabled = false;
             this.stopBitCombo.FormattingEnabled = true;
             this.stopBitCombo.Items.AddRange(new object[] {
             "1",
@@ -137,6 +140,7 @@
             // 
             // PairtyCombo
             // 
+            this.PairtyCombo.Enabled = false;
             this.PairtyCombo.FormattingEnabled = true;
             this.PairtyCombo.Items.AddRange(new object[] {
             "none",

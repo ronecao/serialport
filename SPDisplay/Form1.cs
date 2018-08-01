@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -118,8 +119,8 @@ namespace SPDisplay
             for (int i = 0; i < 8; i++) {
                 byte j = Utils.getbitValue(k, (byte)i);
                 Console.WriteLine("ddddd" + j);
-            } 
-
+            }
+            
             //DrawLine(1, 0, 4, 0xfe);
 
             /*for (int i = 0; i < labelArray.Length/2; i++)
@@ -231,7 +232,9 @@ namespace SPDisplay
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e) {
-
+            statusStrip1.Items[0].Text = "aaa";
+            sender1.callback = updateRecvBytes;
+            sender1.finishCallback = finshrecv;
             int ret = sender1.OpenPort();
             if (ret != 0) {
                 return;
@@ -239,17 +242,105 @@ namespace SPDisplay
             toolStripButton1.Enabled = false;
 
 
-            sender1.SendRequest(ProtocolControl.REQTYPE.DATA, new byte[] { 0x01, 0x4f });
+            sender1.SendRequest(ProtocolControl.REQTYPE.DATA, new byte[] { 0x20, 0xff });
 
-            //while (true) {
-            ArrayList a = sender1.Receivedata();
-            // }
+            ArrayList aaaa= sender1.Receivedatatest();
             sender1.ClosePort();
             toolStripButton1.Enabled = true;
 
-            if (a != null) {
-                DrawItems(a);
+            if (aaaa != null) {
+                DrawItems(aaaa);
             }
+            
+
+            //while (true) {
+            /*Thread t = new Thread(new ThreadStart(sender1.ThreadReceiveData));
+            t.Start();*/
+            /* ArrayList a = sender1.Receivedata();
+             // }
+             sender1.ClosePort();
+             toolStripButton1.Enabled = true;
+
+             if (a != null) {
+                 DrawItems(a);
+             }*/
+        }
+        private void normalprocess() {
+            int ret = sender1.OpenPort();
+            if (ret != 0) {
+                return;
+            }
+            toolStripButton1.Enabled = false;
+
+
+            sender1.SendRequest(ProtocolControl.REQTYPE.DATA, new byte[] { 0x01, 0xff });
+
+            //while (true) {
+             ArrayList a = sender1.Receivedata();
+             // }
+             sender1.ClosePort();
+             toolStripButton1.Enabled = true;
+
+             if (a != null) {
+                 DrawItems(a);
+             }
+        }
+        private void updateRecvBytes(String msg) {
+            showvalue(1, msg + " bytes");
+        }
+
+        public void showvalue( int location, String text) {
+
+            if (statusStrip1.InvokeRequired)//如果调用控件的线程和创建创建控件的线程不是同一个则为True
+            {
+
+
+                while (!this.statusStrip1.IsHandleCreated) {
+                    //解决窗体关闭时出现“访问已释放句柄“的异常
+                    if (this.statusStrip1.Disposing || statusStrip1.IsDisposed)
+                        return;
+                }
+                SetTextCallback d = new SetTextCallback(showvalue);
+                this.statusStrip1.Invoke(d, new object[] { location, text });
+            }
+            else {
+                this.statusStrip1.Items[location].Text = text;
+            }
+
+
+        }
+
+        void show2() {
+            //说明的当前外部线程
+            /*
+             // 摘要:
+        //     获取一个值，该值指示调用方在对控件进行方法调用时是否必须调用 Invoke 方法，因为调用方位于创建控件所在的线程以外的线程中。
+        //
+        // 返回结果:
+        //     如果控件的 System.Windows.Forms.Control.Handle 是在与调用线程不同的线程上创建的（说明您必须通过 Invoke
+        //     方法对控件进行调用），则为 true；否则为 false。
+             */
+            if (InvokeRequired) {
+                /*既然是外部线程，那么就没有权限访问主线程上的控件
+                 * 故要主线程访问，开启一个异步委托捆绑要执行的方法
+                 * 交给主线程执行
+                 */
+                Action ac = new Action(show2);
+                this.Invoke(ac); //这里执行后。则InvokeRequired就为false。因为此时已经是主线程访问当前创建的控件
+            }
+            else {
+                toolStripButton1.Enabled = true;
+            }
+        }
+        private void finshrecv(ArrayList data) {
+            sender1.ClosePort();
+            //toolStripButton1.Enabled = true;
+            //show2();
+
+            if (data != null) {
+                //DrawItems(data);
+            }
+            
         }
 
         private void 设置硬件参数ToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -259,6 +350,7 @@ namespace SPDisplay
             sender1.initSerialPort(paramList[0], paramList[1], paramList[2], paramList[3], paramList[4]);
         }
 
+       
         private void loadFile() {
 
             if (File.Exists("Port.txt")) {
@@ -287,4 +379,5 @@ namespace SPDisplay
             paramList = File.ReadAllLines("port.txt");
         }
     }
+
 }

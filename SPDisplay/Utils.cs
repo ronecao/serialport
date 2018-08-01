@@ -56,5 +56,13 @@ namespace SPDisplay
         public static byte getbitValue(byte invalue, byte bitadd) {
            return (byte)((byte)(invalue << (bitadd)) >> 7);
         }
+        public static Boolean SameArray(byte[] arr1, byte[] arr2) {
+            for (int i = 0; i < arr2.Length; i++) {
+                if (arr1[i] != arr2[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
