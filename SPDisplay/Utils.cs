@@ -56,13 +56,23 @@ namespace SPDisplay
         public static byte getbitValue(byte invalue, byte bitadd) {
            return (byte)((byte)(invalue << (bitadd)) >> 7);
         }
-        public static Boolean SameArray(byte[] arr1, byte[] arr2) {
-            for (int i = 0; i < arr2.Length; i++) {
-                if (arr1[i] != arr2[i]) {
+        public static Boolean SameArray(byte[] arr1, byte[] key) {
+            for (int i = 0; i < key.Length; i++) {
+                if (arr1[i] != key[i]) {
                     return false;
                 }
             }
             return true;
+        }
+        public static byte[] getIntByte(int i) {
+
+            byte[] d = BitConverter.GetBytes(i);
+            byte[] ret = new byte[4];
+            ret[0] = d[3];
+            ret[1] = d[2];
+            ret[2] = d[1];
+            ret[3] = d[0];
+            return ret;
         }
     }
 }

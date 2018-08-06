@@ -34,6 +34,9 @@
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripTextBox2 = new System.Windows.Forms.ToolStripTextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.设置ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,6 +64,18 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripReceivedBytesLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.m_lineLabel = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.m_addressLabel = new System.Windows.Forms.Label();
+            this.m_dataLengthLabel = new System.Windows.Forms.Label();
+            this.m_dataLabel = new System.Windows.Forms.Label();
+            this.previousBtn = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.counterLabel = new System.Windows.Forms.Label();
+            this.errorListView = new System.Windows.Forms.ListView();
             this.toolStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -73,22 +88,25 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
             this.toolStripButton2,
-            this.toolStripButton3});
+            this.toolStripButton3,
+            this.toolStripTextBox1,
+            this.toolStripSeparator1,
+            this.toolStripTextBox2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 28);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(915, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(1142, 27);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             this.toolStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip1_ItemClicked);
             // 
             // toolStripButton1
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(43, 24);
-            this.toolStripButton1.Text = "开始";
+            this.toolStripButton1.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton1.Text = "    ";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripButton2
@@ -99,6 +117,7 @@
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(24, 24);
             this.toolStripButton2.Text = "toolStripButton2";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // toolStripButton3
             // 
@@ -108,6 +127,23 @@
             this.toolStripButton3.Name = "toolStripButton3";
             this.toolStripButton3.Size = new System.Drawing.Size(24, 24);
             this.toolStripButton3.Text = "toolStripButton3";
+            // 
+            // toolStripTextBox1
+            // 
+            this.toolStripTextBox1.Name = "toolStripTextBox1";
+            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 27);
+            this.toolStripTextBox1.TextChanged += new System.EventHandler(this.Value1TextChanged);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+            // 
+            // toolStripTextBox2
+            // 
+            this.toolStripTextBox2.Name = "toolStripTextBox2";
+            this.toolStripTextBox2.Size = new System.Drawing.Size(100, 27);
+            this.toolStripTextBox2.TextChanged += new System.EventHandler(this.Value2TextChanged);
             // 
             // contextMenuStrip1
             // 
@@ -142,7 +178,7 @@
             this.帮助HToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(915, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1142, 28);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -280,10 +316,13 @@
             // 
             // chartForm2
             // 
-            this.chartForm2.Location = new System.Drawing.Point(6, 59);
+            this.chartForm2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chartForm2.AutoSize = true;
+            this.chartForm2.Location = new System.Drawing.Point(13, 71);
             this.chartForm2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chartForm2.Name = "chartForm2";
-            this.chartForm2.Size = new System.Drawing.Size(902, 255);
+            this.chartForm2.Size = new System.Drawing.Size(1116, 276);
             this.chartForm2.TabIndex = 5;
             this.chartForm2.Load += new System.EventHandler(this.chartForm2_Load);
             // 
@@ -293,9 +332,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripReceivedBytesLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 520);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 664);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(915, 25);
+            this.statusStrip1.Size = new System.Drawing.Size(1142, 25);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -311,11 +350,142 @@
             this.toolStripReceivedBytesLabel.Size = new System.Drawing.Size(115, 20);
             this.toolStripReceivedBytesLabel.Text = "ReceivedBytes";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(175, 373);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(39, 15);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Line";
+            this.label1.Visible = false;
+            // 
+            // m_lineLabel
+            // 
+            this.m_lineLabel.AutoSize = true;
+            this.m_lineLabel.Location = new System.Drawing.Point(279, 373);
+            this.m_lineLabel.Name = "m_lineLabel";
+            this.m_lineLabel.Size = new System.Drawing.Size(55, 15);
+            this.m_lineLabel.TabIndex = 8;
+            this.m_lineLabel.Text = "label2";
+            this.m_lineLabel.Visible = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(175, 409);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(63, 15);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "address";
+            this.label3.Visible = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(175, 447);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(87, 15);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "datalength";
+            this.label4.Visible = false;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(175, 484);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(39, 15);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "data";
+            this.label5.Visible = false;
+            // 
+            // m_addressLabel
+            // 
+            this.m_addressLabel.AutoSize = true;
+            this.m_addressLabel.Location = new System.Drawing.Point(279, 409);
+            this.m_addressLabel.Name = "m_addressLabel";
+            this.m_addressLabel.Size = new System.Drawing.Size(55, 15);
+            this.m_addressLabel.TabIndex = 12;
+            this.m_addressLabel.Text = "label6";
+            this.m_addressLabel.Visible = false;
+            // 
+            // m_dataLengthLabel
+            // 
+            this.m_dataLengthLabel.AutoSize = true;
+            this.m_dataLengthLabel.Location = new System.Drawing.Point(279, 447);
+            this.m_dataLengthLabel.Name = "m_dataLengthLabel";
+            this.m_dataLengthLabel.Size = new System.Drawing.Size(55, 15);
+            this.m_dataLengthLabel.TabIndex = 13;
+            this.m_dataLengthLabel.Text = "label7";
+            this.m_dataLengthLabel.Visible = false;
+            // 
+            // m_dataLabel
+            // 
+            this.m_dataLabel.AutoSize = true;
+            this.m_dataLabel.Location = new System.Drawing.Point(279, 484);
+            this.m_dataLabel.Name = "m_dataLabel";
+            this.m_dataLabel.Size = new System.Drawing.Size(55, 15);
+            this.m_dataLabel.TabIndex = 14;
+            this.m_dataLabel.Text = "label8";
+            this.m_dataLabel.Visible = false;
+            // 
+            // previousBtn
+            // 
+            this.previousBtn.Location = new System.Drawing.Point(139, 519);
+            this.previousBtn.Name = "previousBtn";
+            this.previousBtn.Size = new System.Drawing.Size(75, 23);
+            this.previousBtn.TabIndex = 15;
+            this.previousBtn.Text = "<-";
+            this.previousBtn.UseVisualStyleBackColor = true;
+            this.previousBtn.Visible = false;
+            this.previousBtn.Click += new System.EventHandler(this.previousBtn_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(369, 519);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 16;
+            this.button2.Text = "->";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Visible = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            // 
+            // counterLabel
+            // 
+            this.counterLabel.AutoSize = true;
+            this.counterLabel.Location = new System.Drawing.Point(265, 519);
+            this.counterLabel.Name = "counterLabel";
+            this.counterLabel.Size = new System.Drawing.Size(0, 15);
+            this.counterLabel.TabIndex = 17;
+            this.counterLabel.Visible = false;
+            // 
+            // errorListView
+            // 
+            this.errorListView.Location = new System.Drawing.Point(537, 364);
+            this.errorListView.Name = "errorListView";
+            this.errorListView.Size = new System.Drawing.Size(534, 258);
+            this.errorListView.TabIndex = 18;
+            this.errorListView.UseCompatibleStateImageBehavior = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(915, 545);
+            this.ClientSize = new System.Drawing.Size(1142, 689);
+            this.Controls.Add(this.errorListView);
+            this.Controls.Add(this.counterLabel);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.previousBtn);
+            this.Controls.Add(this.m_dataLabel);
+            this.Controls.Add(this.m_dataLengthLabel);
+            this.Controls.Add(this.m_addressLabel);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.m_lineLabel);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.chartForm2);
             this.Controls.Add(this.toolStrip1);
@@ -370,6 +540,21 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripReceivedBytesLabel;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label m_lineLabel;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label m_addressLabel;
+        private System.Windows.Forms.Label m_dataLengthLabel;
+        private System.Windows.Forms.Label m_dataLabel;
+        private System.Windows.Forms.Button previousBtn;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label counterLabel;
+        private System.Windows.Forms.ListView errorListView;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox2;
     }
 }
 

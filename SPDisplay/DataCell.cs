@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SPDisplay {
-    class DataCell {
+    public class DataCell {
         public int line;
         public int address;
         public int datalength;

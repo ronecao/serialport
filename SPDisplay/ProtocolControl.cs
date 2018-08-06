@@ -9,6 +9,7 @@ using static SPDisplay.Utils;
 
 namespace SPDisplay {
     class ProtocolControl {
+
         public enum REQTYPE { NONE, ERROR, FIND, DATA, VERSION };
         static readonly byte[] upheader = new byte[3] { 0x81, 0x06, 0x09 };
         static readonly byte[] downheader = new byte[4] { 0xFF, 0xFF, 0x87, 0x7E };
@@ -29,6 +30,8 @@ namespace SPDisplay {
 
 
 
+        public static UpdateErrorList updateErrorListCallback;
+
 
         /*
          * 重置receiver数据
@@ -47,6 +50,53 @@ namespace SPDisplay {
             upRecvDataCounter = 0;
             upRecvData = new ArrayList();
         }
+        private static int FindDownHeader(byte[] data, int inlength) {
+            byte[] a = new byte[3];
+            byte[] key = new byte[] {0x87,0x7e,0x23};
+             for (int i = 0; i< inlength-3; inlength++) {
+                Buffer.BlockCopy(data, i, a, 0, 3);
+                if (SameArray(a, a)) {
+                    return i+3;
+                }
+            }
+            return -1;
+        }
+        private static int FindeNewFrame(byte[] data, int start,int length) {
+
+            byte[] temp = new byte[length];
+            
+            byte[] key = new byte[] { 0x87, 0x7e, 0x23 };
+            long datalength = 0;
+            for (int i = start; i < length - 8; i++) {
+                Console.WriteLine("data[{0}] value {1}",i,data[i].ToString("X2"));
+                if (data[i] >= 0x31 && data[i] <= 0x35) {
+                    
+                    datalength = 0;
+                    datalength = datalength + data[i+5] * 256 * 256 * 256;
+                    datalength = datalength + data[i+6] * 256 * 256;             
+                    datalength = datalength + data[i+7] * 256;
+                    datalength = datalength + data[i+8];
+                    Console.WriteLine("data length"+ datalength);
+                    
+                    if ((i + datalength) < length && data[i+12+1 + datalength] >= 0x31 && data[i +12+1+ datalength] <= 0x35) {
+                        Console.WriteLine("return i" + i);
+                        return i;
+                    }else{
+                        try {
+                            Console.WriteLine("i+datalength{0} lenght:{1} data[i+12 + datalength]{2}", i + datalength, length, data[i + 12 + datalength]);
+                        }
+                        catch (Exception es) {
+                            
+                            Console.WriteLine("i+datalength{0} lenght:{1}  ERROR:{2}", i + datalength, length,es.ToString());
+                        }
+                         
+                    }
+                   
+                    
+                }
+            }
+            return -1;
+        }
         /*
          * Receiver数据解包
          */
@@ -55,13 +105,31 @@ namespace SPDisplay {
             int line;
             int loc = 0;
             int datalength = 0;
-
             ArrayList datavalue = new ArrayList();
+            int i = FindDownHeader(data, length);
+            if (i < 0) {
+                updateErrorListCallback("no header found");
+                return null;
+            }
+            i = i + 2;
             //dumpdata(data, length, "recev");
-            //Console.WriteLine("unpacking***************");
+            Console.WriteLine("header end loc"+ i);
             String log = "";
-            for (int i = 5; i < length - 10; i++) {
+            for ( ; i < length - 10; i++) {
                 line = data[i];
+                if (line < 0x31 || line > 0x36) {
+                    i = FindeNewFrame(data, i, length);
+                    if (i > 0) {
+                        line = data[i];
+                        updateErrorListCallback("数据错误 line");
+                    }
+                    else {
+                        updateErrorListCallback("数据错误 line 退出");
+                        return datavalue;
+                    }
+                    
+                
+                }
                 DataCell cell = new DataCell();
                 cell.line = line;
                
@@ -94,34 +162,61 @@ namespace SPDisplay {
                 log = log + data[i].ToString("X2");
                 datalength = datalength + data[i];
                 i++;
+                if (datalength + i > length|| datalength<0) {
+                   
+                        updateErrorListCallback("数据长度错误丢弃");
+                    
+                    continue;
+                }
                 cell.datalength = datalength;
+                
                 //Console.WriteLine("datalengt:"+log);
                // Console.WriteLine("datalenght" + datalength);
                 int c = i;
                 int j = 0;
                 cell.data = new byte[datalength];
                 String valuestr = " ";
+                
                 for (; i < c + datalength; i++) {
                     //Console.Write(data[i].ToString("X2"));
 
                    // Console.Write(" ");
                     valuestr = valuestr + data[i].ToString("X2") + " ";
-                    if ((i + 1) % 16 == 0) {
-                       // Console.WriteLine(" ");
-                    }
+                    
+                    
                     cell.data[j] = data[i];
                     j++;
                 }
-                //Console.WriteLine(" ");
-                datavalue.Add(cell);
-                //showvalue(line, loc, valuestr);
 
-               // Console.WriteLine("CRC1" + data[i].ToString("X2"));
-                i++;
-                i = i + 2;
-                //Console.WriteLine("******************************" + i);
-                datalength = 0;
-                loc = 0;
+                //Console.WriteLine(" ");
+
+                //showvalue(line, loc, valuestr);
+                byte crcres = CRCSUM(cell.data, datalength);
+                Console.WriteLine("CRC1" + data[i].ToString("X2") + "res:" +crcres.ToString("X2") );
+                //updateErrorListCallback("CRC1" + data[i].ToString("X2") + "res:" + crcres.ToString("X2"));
+                if (crcres == data[i]) {
+                    datavalue.Add(cell);
+                    i++;
+                    i = i + 2;
+                    //Console.WriteLine("******************************" + i);
+                    datalength = 0;
+                    loc = 0;
+                    //updateErrorListCallback("Data Added");
+                }
+                else {
+                    datavalue.Add(cell);
+                    Console.WriteLine("CRCWRONG");
+                    //updateErrorListCallback("Data Added with CRCERROR");
+                    i++;
+                    i = i + 2;
+                    //Console.WriteLine("******************************" + i);
+                    datalength = 0;
+                    loc = 0;
+                }
+                    
+                
+               
+               
             }
             return datavalue;
         }

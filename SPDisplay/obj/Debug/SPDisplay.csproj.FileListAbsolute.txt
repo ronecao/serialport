@@ -11,3 +11,4 @@ D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay
 D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.pdb
 D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\bin\Debug\5SeriesChart.dll
 D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.csproj.CopyComplete
+D:\用户\Documents\ASCproject\SPDisplay\SPDisplay\SPDisplay\obj\Debug\SPDisplay.ThreadForm.resources

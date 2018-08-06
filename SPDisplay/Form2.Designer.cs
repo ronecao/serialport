@@ -58,6 +58,7 @@
             this.label2.Size = new System.Drawing.Size(52, 15);
             this.label2.TabIndex = 1;
             this.label2.Text = "波特率";
+            this.label2.Visible = false;
             // 
             // label3
             // 
@@ -67,6 +68,7 @@
             this.label3.Size = new System.Drawing.Size(52, 15);
             this.label3.TabIndex = 2;
             this.label3.Text = "校验位";
+            this.label3.Visible = false;
             // 
             // label4
             // 
@@ -76,6 +78,7 @@
             this.label4.Size = new System.Drawing.Size(52, 15);
             this.label4.TabIndex = 3;
             this.label4.Text = "数据位";
+            this.label4.Visible = false;
             this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // label5
@@ -86,10 +89,11 @@
             this.label5.Size = new System.Drawing.Size(52, 15);
             this.label5.TabIndex = 4;
             this.label5.Text = "停止位";
+            this.label5.Visible = false;
             // 
             // saveBtn
             // 
-            this.saveBtn.Location = new System.Drawing.Point(124, 277);
+            this.saveBtn.Location = new System.Drawing.Point(128, 97);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(75, 23);
             this.saveBtn.TabIndex = 5;
@@ -104,6 +108,7 @@
             this.databitText.Name = "databitText";
             this.databitText.Size = new System.Drawing.Size(157, 25);
             this.databitText.TabIndex = 7;
+            this.databitText.Visible = false;
             this.databitText.TextChanged += new System.EventHandler(this.databitText_TextChanged);
             // 
             // brateText
@@ -113,6 +118,7 @@
             this.brateText.Name = "brateText";
             this.brateText.Size = new System.Drawing.Size(157, 25);
             this.brateText.TabIndex = 9;
+            this.brateText.Visible = false;
             this.brateText.TextChanged += new System.EventHandler(this.brateText_TextChanged);
             // 
             // portlistCombo
@@ -136,6 +142,7 @@
             this.stopBitCombo.Name = "stopBitCombo";
             this.stopBitCombo.Size = new System.Drawing.Size(157, 23);
             this.stopBitCombo.TabIndex = 12;
+            this.stopBitCombo.Visible = false;
             this.stopBitCombo.SelectedIndexChanged += new System.EventHandler(this.stopBitCombo_SelectedIndexChanged);
             // 
             // PairtyCombo
@@ -152,19 +159,20 @@
             this.PairtyCombo.Name = "PairtyCombo";
             this.PairtyCombo.Size = new System.Drawing.Size(157, 23);
             this.PairtyCombo.TabIndex = 13;
+            this.PairtyCombo.Visible = false;
             this.PairtyCombo.SelectedIndexChanged += new System.EventHandler(this.PairtyCombo_SelectedIndexChanged);
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 387);
+            this.ClientSize = new System.Drawing.Size(349, 163);
+            this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.PairtyCombo);
             this.Controls.Add(this.stopBitCombo);
             this.Controls.Add(this.portlistCombo);
             this.Controls.Add(this.brateText);
             this.Controls.Add(this.databitText);
-            this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);

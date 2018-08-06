@@ -10,6 +10,7 @@ namespace SPDisplay {
     class SerialPortControl {
         private readonly int SUCC = 0;
         public SerialPort sp1;
+       
         public SerialPortControl(String name, String baudratestr, String paritystr, String databitstr, String stopbitstr) {
             sp1 = new SerialPort();
             sp1.PortName = name;
@@ -52,7 +53,7 @@ namespace SPDisplay {
                     break;
             }
             sp1.DataBits = int.Parse(databitstr);
-            sp1.ReadTimeout = 500;
+            sp1.ReadTimeout = 5000;
             sp1.WriteTimeout = 1000;
             sp1.ReadBufferSize = 1024 * 1024 * 8;
         }
@@ -138,6 +139,7 @@ namespace SPDisplay {
         }
         public void ClosePort() {
             sp1.Close();
+            sp1.Dispose();
         }
 
 
