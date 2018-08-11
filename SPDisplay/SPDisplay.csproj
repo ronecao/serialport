@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>SPDisplay</RootNamespace>
     <AssemblyName>SPDisplay</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -51,8 +51,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frame.cs" />
     <Compile Include="DataCell.cs" />
+    <Compile Include="FTPHelper.cs" />
+    <Compile Include="LableSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LableSet.Designer.cs">
+      <DependentUpon>LableSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LocalUpdateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LocalUpdateForm.Designer.cs">
+      <DependentUpon>LocalUpdateForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProtocolControl.cs" />
     <Compile Include="SerialPortControl.cs" />
     <Compile Include="ThreadController.cs" />
@@ -84,6 +103,16 @@
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LableSet.resx">
+      <DependentUpon>LableSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalUpdateForm.resx">
+      <DependentUpon>LocalUpdateForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -112,7 +141,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="play.png" />
+    <None Include="icons\cotinueBTN.png" />
+    <None Include="icons\play.png" />
+    <None Include="icons\PlayBTN.png" />
+    <None Include="icons\zoominbtn.png" />
+    <None Include="icons\zoomout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\showAllbtn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\stopBtn.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

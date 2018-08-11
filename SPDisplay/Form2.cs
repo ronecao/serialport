@@ -58,7 +58,7 @@ namespace SPDisplay
 
             brateText.Text = paramList[1];
             //checkText.Text = paramList[2];
-            switch (paramList[2]) {
+            /*switch (paramList[2]) {
                 case "none":
                     PairtyCombo.SelectedIndex = 0;
                     break;
@@ -77,9 +77,9 @@ namespace SPDisplay
                 default:
                     PairtyCombo.SelectedIndex = 0;
                     break;
-            }
+            }*/
 
-            databitText.Text = paramList[3];
+            /*databitText.Text = paramList[3];
             //stopbitText.Text = paramList[4];
             switch (paramList[4]) {
                 case "1":
@@ -94,7 +94,7 @@ namespace SPDisplay
                 default:
                     stopBitCombo.SelectedIndex = 0;
                     break;
-            }
+            }*/
             formload = false;
 
             
@@ -109,7 +109,7 @@ namespace SPDisplay
             }
             else {
                 FileStream fs1 = new FileStream("port.txt", FileMode.OpenOrCreate);
-                byte[] data = new UTF8Encoding().GetBytes("COM1\r\n115200\r\nnull\r\n8\r\n1\r\n");
+                byte[] data = new UTF8Encoding().GetBytes("COM1\r\n115200\r\n");
                 fs1.Write(data, 0, data.Length);
                 fs1.Flush();
                 fs1.Close();

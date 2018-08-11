@@ -1,4 +1,6 @@
-﻿namespace SPDisplay
+﻿using System.Windows.Forms;
+
+namespace SPDisplay
 {
     partial class Form1
     {
@@ -29,14 +31,16 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.StartButton = new System.Windows.Forms.ToolStripButton();
+            this.ContinueStartBtn = new System.Windows.Forms.ToolStripButton();
+            this.stopBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripTextBox2 = new System.Windows.Forms.ToolStripTextBox();
+            this.ZoomInBtn = new System.Windows.Forms.ToolStripButton();
+            this.zoomOutBtn = new System.Windows.Forms.ToolStripButton();
+            this.ShowAllBtn = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.设置ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,26 +60,19 @@
             this.在线更新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.检查程序版本ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.检查网络版本ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.本地更新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.帮助HToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关于软件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.Dialog = new System.Windows.Forms.OpenFileDialog();
-            this.chartForm2 = new _5SeriesChart.ChartForm();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripReceivedBytesLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.m_lineLabel = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.m_addressLabel = new System.Windows.Forms.Label();
-            this.m_dataLengthLabel = new System.Windows.Forms.Label();
-            this.m_dataLabel = new System.Windows.Forms.Label();
-            this.previousBtn = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.counterLabel = new System.Windows.Forms.Label();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.errorListView = new System.Windows.Forms.ListView();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.chartForm2 = new _5SeriesChart.ChartForm();
             this.toolStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -84,66 +81,106 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(26, 26);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripButton2,
-            this.toolStripButton3,
+            this.StartButton,
+            this.ContinueStartBtn,
+            this.stopBtn,
             this.toolStripTextBox1,
             this.toolStripSeparator1,
-            this.toolStripTextBox2});
+            this.toolStripTextBox2,
+            this.ZoomInBtn,
+            this.zoomOutBtn,
+            this.ShowAllBtn});
             this.toolStrip1.Location = new System.Drawing.Point(0, 28);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1142, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(1173, 33);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             this.toolStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip1_ItemClicked);
             // 
-            // toolStripButton1
+            // StartButton
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton1.Text = "    ";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.StartButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.StartButton.Image = global::SPDisplay.Properties.Resources.PlayBTN;
+            this.StartButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.StartButton.Name = "StartButton";
+            this.StartButton.Size = new System.Drawing.Size(30, 30);
+            this.StartButton.Text = "    ";
+            this.StartButton.ToolTipText = "开始";
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Clicked);
             // 
-            // toolStripButton2
+            // ContinueStartBtn
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton2.Text = "toolStripButton2";
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.ContinueStartBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ContinueStartBtn.Image = global::SPDisplay.Properties.Resources.cotinueBTN;
+            this.ContinueStartBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ContinueStartBtn.Name = "ContinueStartBtn";
+            this.ContinueStartBtn.Size = new System.Drawing.Size(30, 30);
+            this.ContinueStartBtn.Text = "连续开始";
+            this.ContinueStartBtn.Click += new System.EventHandler(this.ContinueButton_Clicked);
             // 
-            // toolStripButton3
+            // stopBtn
             // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton3.Text = "toolStripButton3";
+            this.stopBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.stopBtn.Image = global::SPDisplay.Properties.Resources.stopBtn;
+            this.stopBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.stopBtn.Name = "stopBtn";
+            this.stopBtn.Size = new System.Drawing.Size(30, 30);
+            this.stopBtn.Text = "toolStripButton3";
+            this.stopBtn.ToolTipText = "停止";
+            this.stopBtn.Click += new System.EventHandler(this.StopStartBtn_Click);
             // 
             // toolStripTextBox1
             // 
             this.toolStripTextBox1.Name = "toolStripTextBox1";
-            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 27);
+            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 33);
+            this.toolStripTextBox1.Text = "1";
             this.toolStripTextBox1.TextChanged += new System.EventHandler(this.Value1TextChanged);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 33);
             // 
             // toolStripTextBox2
             // 
             this.toolStripTextBox2.Name = "toolStripTextBox2";
-            this.toolStripTextBox2.Size = new System.Drawing.Size(100, 27);
+            this.toolStripTextBox2.Size = new System.Drawing.Size(100, 33);
+            this.toolStripTextBox2.Text = "1";
+            this.toolStripTextBox2.Click += new System.EventHandler(this.toolStripTextBox2_Click);
             this.toolStripTextBox2.TextChanged += new System.EventHandler(this.Value2TextChanged);
+            // 
+            // ZoomInBtn
+            // 
+            this.ZoomInBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ZoomInBtn.Image = global::SPDisplay.Properties.Resources.zoominbtn;
+            this.ZoomInBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ZoomInBtn.Name = "ZoomInBtn";
+            this.ZoomInBtn.Size = new System.Drawing.Size(30, 30);
+            this.ZoomInBtn.Text = "放大";
+            this.ZoomInBtn.Click += new System.EventHandler(this.ZoomInBtn_Click);
+            // 
+            // zoomOutBtn
+            // 
+            this.zoomOutBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.zoomOutBtn.Image = global::SPDisplay.Properties.Resources.zoomout;
+            this.zoomOutBtn.ImageTransparentColor = System.Drawing.Color.LightSlateGray;
+            this.zoomOutBtn.Name = "zoomOutBtn";
+            this.zoomOutBtn.Size = new System.Drawing.Size(30, 30);
+            this.zoomOutBtn.Text = "缩小";
+            this.zoomOutBtn.Click += new System.EventHandler(this.zoomOutBtn_Click);
+            // 
+            // ShowAllBtn
+            // 
+            this.ShowAllBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ShowAllBtn.Image = global::SPDisplay.Properties.Resources.showAllbtn;
+            this.ShowAllBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ShowAllBtn.Name = "ShowAllBtn";
+            this.ShowAllBtn.Size = new System.Drawing.Size(30, 30);
+            this.ShowAllBtn.Text = "toolStripButton2";
+            this.ShowAllBtn.ToolTipText = "全显";
+            this.ShowAllBtn.Click += new System.EventHandler(this.ShowAllBtn_Clicked);
             // 
             // contextMenuStrip1
             // 
@@ -178,7 +215,7 @@
             this.帮助HToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1142, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1173, 28);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -188,29 +225,32 @@
             this.OpenFileToolStripMenuItem,
             this.SaveFileToolStripMenuItem,
             this.ExitFileToolStripMenuItem});
-            this.FileToolStripMenuItem.Enabled = false;
             this.FileToolStripMenuItem.Name = "FileToolStripMenuItem";
             this.FileToolStripMenuItem.Size = new System.Drawing.Size(69, 24);
             this.FileToolStripMenuItem.Text = "文件(F)";
+            this.FileToolStripMenuItem.Click += new System.EventHandler(this.FileToolStripMenuItem_Click);
             // 
             // OpenFileToolStripMenuItem
             // 
+            this.OpenFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.OpenFileToolStripMenuItem.Name = "OpenFileToolStripMenuItem";
             this.OpenFileToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
             this.OpenFileToolStripMenuItem.Text = "打开文件";
-            this.OpenFileToolStripMenuItem.Click += new System.EventHandler(this.端口ToolStripMenuItem_Click);
+            this.OpenFileToolStripMenuItem.Click += new System.EventHandler(this.OpenFileToolStripMenuItem_Click);
             // 
             // SaveFileToolStripMenuItem
             // 
             this.SaveFileToolStripMenuItem.Name = "SaveFileToolStripMenuItem";
             this.SaveFileToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
             this.SaveFileToolStripMenuItem.Text = "保存文件";
+            this.SaveFileToolStripMenuItem.Click += new System.EventHandler(this.SaveFileToolStripMenuItem_Click);
             // 
             // ExitFileToolStripMenuItem
             // 
             this.ExitFileToolStripMenuItem.Name = "ExitFileToolStripMenuItem";
             this.ExitFileToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
             this.ExitFileToolStripMenuItem.Text = "退出文件";
+            this.ExitFileToolStripMenuItem.Click += new System.EventHandler(this.ExitFileToolStripMenuItem_Click);
             // 
             // OperationToolStripMenuItem
             // 
@@ -227,18 +267,21 @@
             this.ZoomInToolStripMenuItem.Name = "ZoomInToolStripMenuItem";
             this.ZoomInToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.ZoomInToolStripMenuItem.Text = "放大";
+            this.ZoomInToolStripMenuItem.Click += new System.EventHandler(this.ZoomInToolStripMenuItem_Click);
             // 
             // ZoomOutToolStripMenuItem
             // 
             this.ZoomOutToolStripMenuItem.Name = "ZoomOutToolStripMenuItem";
             this.ZoomOutToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.ZoomOutToolStripMenuItem.Text = "缩小";
+            this.ZoomOutToolStripMenuItem.Click += new System.EventHandler(this.ZoomOutToolStripMenuItem_Click);
             // 
             // ShowAllToolStripMenuItem
             // 
             this.ShowAllToolStripMenuItem.Name = "ShowAllToolStripMenuItem";
             this.ShowAllToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.ShowAllToolStripMenuItem.Text = "全显";
+            this.ShowAllToolStripMenuItem.Click += new System.EventHandler(this.ShowAllToolStripMenuItem_Click);
             // 
             // 硬件HToolStripMenuItem
             // 
@@ -254,6 +297,7 @@
             this.StartCollectToolStripMenuItem.Name = "StartCollectToolStripMenuItem";
             this.StartCollectToolStripMenuItem.Size = new System.Drawing.Size(174, 26);
             this.StartCollectToolStripMenuItem.Text = "开始采集";
+            this.StartCollectToolStripMenuItem.Click += new System.EventHandler(this.StartCollectToolStripMenuItem_Click);
             // 
             // 设置硬件参数ToolStripMenuItem
             // 
@@ -267,7 +311,8 @@
             this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.在线更新ToolStripMenuItem,
             this.检查程序版本ToolStripMenuItem,
-            this.检查网络版本ToolStripMenuItem});
+            this.检查网络版本ToolStripMenuItem,
+            this.本地更新ToolStripMenuItem});
             this.工具TToolStripMenuItem.Name = "工具TToolStripMenuItem";
             this.工具TToolStripMenuItem.Size = new System.Drawing.Size(70, 24);
             this.工具TToolStripMenuItem.Text = "工具(T)";
@@ -275,20 +320,28 @@
             // 在线更新ToolStripMenuItem
             // 
             this.在线更新ToolStripMenuItem.Name = "在线更新ToolStripMenuItem";
-            this.在线更新ToolStripMenuItem.Size = new System.Drawing.Size(174, 26);
+            this.在线更新ToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.在线更新ToolStripMenuItem.Text = "在线更新";
             // 
             // 检查程序版本ToolStripMenuItem
             // 
             this.检查程序版本ToolStripMenuItem.Name = "检查程序版本ToolStripMenuItem";
-            this.检查程序版本ToolStripMenuItem.Size = new System.Drawing.Size(174, 26);
+            this.检查程序版本ToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.检查程序版本ToolStripMenuItem.Text = "检查程序版本";
+            this.检查程序版本ToolStripMenuItem.Click += new System.EventHandler(this.检查程序版本ToolStripMenuItem_Click);
             // 
             // 检查网络版本ToolStripMenuItem
             // 
             this.检查网络版本ToolStripMenuItem.Name = "检查网络版本ToolStripMenuItem";
-            this.检查网络版本ToolStripMenuItem.Size = new System.Drawing.Size(174, 26);
+            this.检查网络版本ToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.检查网络版本ToolStripMenuItem.Text = "检查网络版本";
+            // 
+            // 本地更新ToolStripMenuItem
+            // 
+            this.本地更新ToolStripMenuItem.Name = "本地更新ToolStripMenuItem";
+            this.本地更新ToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.本地更新ToolStripMenuItem.Text = "本地更新(测试)";
+            this.本地更新ToolStripMenuItem.Click += new System.EventHandler(this.本地更新ToolStripMenuItem_Click);
             // 
             // 帮助HToolStripMenuItem
             // 
@@ -303,38 +356,28 @@
             this.关于软件ToolStripMenuItem.Name = "关于软件ToolStripMenuItem";
             this.关于软件ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
             this.关于软件ToolStripMenuItem.Text = "关于软件";
+            this.关于软件ToolStripMenuItem.Click += new System.EventHandler(this.关于软件ToolStripMenuItem_Click_1);
             // 
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 1000;
+            this.timer1.Interval = 12000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Dialog
             // 
             this.Dialog.FileName = "openFileDialog1";
             // 
-            // chartForm2
-            // 
-            this.chartForm2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chartForm2.AutoSize = true;
-            this.chartForm2.Location = new System.Drawing.Point(13, 71);
-            this.chartForm2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.chartForm2.Name = "chartForm2";
-            this.chartForm2.Size = new System.Drawing.Size(1116, 276);
-            this.chartForm2.TabIndex = 5;
-            this.chartForm2.Load += new System.EventHandler(this.chartForm2_Load);
-            // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
-            this.toolStripReceivedBytesLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 664);
+            this.toolStripReceivedBytesLabel,
+            this.toolStripProgressBar1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 695);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1142, 25);
+            this.statusStrip1.Size = new System.Drawing.Size(1173, 25);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -349,117 +392,12 @@
             this.toolStripReceivedBytesLabel.Name = "toolStripReceivedBytesLabel";
             this.toolStripReceivedBytesLabel.Size = new System.Drawing.Size(115, 20);
             this.toolStripReceivedBytesLabel.Text = "ReceivedBytes";
+            this.toolStripReceivedBytesLabel.Click += new System.EventHandler(this.toolStripReceivedBytesLabel_Click);
             // 
-            // label1
+            // toolStripProgressBar1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(175, 373);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 15);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Line";
-            this.label1.Visible = false;
-            // 
-            // m_lineLabel
-            // 
-            this.m_lineLabel.AutoSize = true;
-            this.m_lineLabel.Location = new System.Drawing.Point(279, 373);
-            this.m_lineLabel.Name = "m_lineLabel";
-            this.m_lineLabel.Size = new System.Drawing.Size(55, 15);
-            this.m_lineLabel.TabIndex = 8;
-            this.m_lineLabel.Text = "label2";
-            this.m_lineLabel.Visible = false;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(175, 409);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(63, 15);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "address";
-            this.label3.Visible = false;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(175, 447);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(87, 15);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "datalength";
-            this.label4.Visible = false;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(175, 484);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(39, 15);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "data";
-            this.label5.Visible = false;
-            // 
-            // m_addressLabel
-            // 
-            this.m_addressLabel.AutoSize = true;
-            this.m_addressLabel.Location = new System.Drawing.Point(279, 409);
-            this.m_addressLabel.Name = "m_addressLabel";
-            this.m_addressLabel.Size = new System.Drawing.Size(55, 15);
-            this.m_addressLabel.TabIndex = 12;
-            this.m_addressLabel.Text = "label6";
-            this.m_addressLabel.Visible = false;
-            // 
-            // m_dataLengthLabel
-            // 
-            this.m_dataLengthLabel.AutoSize = true;
-            this.m_dataLengthLabel.Location = new System.Drawing.Point(279, 447);
-            this.m_dataLengthLabel.Name = "m_dataLengthLabel";
-            this.m_dataLengthLabel.Size = new System.Drawing.Size(55, 15);
-            this.m_dataLengthLabel.TabIndex = 13;
-            this.m_dataLengthLabel.Text = "label7";
-            this.m_dataLengthLabel.Visible = false;
-            // 
-            // m_dataLabel
-            // 
-            this.m_dataLabel.AutoSize = true;
-            this.m_dataLabel.Location = new System.Drawing.Point(279, 484);
-            this.m_dataLabel.Name = "m_dataLabel";
-            this.m_dataLabel.Size = new System.Drawing.Size(55, 15);
-            this.m_dataLabel.TabIndex = 14;
-            this.m_dataLabel.Text = "label8";
-            this.m_dataLabel.Visible = false;
-            // 
-            // previousBtn
-            // 
-            this.previousBtn.Location = new System.Drawing.Point(139, 519);
-            this.previousBtn.Name = "previousBtn";
-            this.previousBtn.Size = new System.Drawing.Size(75, 23);
-            this.previousBtn.TabIndex = 15;
-            this.previousBtn.Text = "<-";
-            this.previousBtn.UseVisualStyleBackColor = true;
-            this.previousBtn.Visible = false;
-            this.previousBtn.Click += new System.EventHandler(this.previousBtn_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(369, 519);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 16;
-            this.button2.Text = "->";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Visible = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
-            // 
-            // counterLabel
-            // 
-            this.counterLabel.AutoSize = true;
-            this.counterLabel.Location = new System.Drawing.Point(265, 519);
-            this.counterLabel.Name = "counterLabel";
-            this.counterLabel.Size = new System.Drawing.Size(0, 15);
-            this.counterLabel.TabIndex = 17;
-            this.counterLabel.Visible = false;
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 19);
             // 
             // errorListView
             // 
@@ -468,24 +406,49 @@
             this.errorListView.Size = new System.Drawing.Size(534, 258);
             this.errorListView.TabIndex = 18;
             this.errorListView.UseCompatibleStateImageBehavior = false;
+            this.errorListView.Visible = false;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(12, 445);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(1148, 245);
+            this.textBox1.TabIndex = 19;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPressed);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.textBox2.Font = new System.Drawing.Font("宋体", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox2.Location = new System.Drawing.Point(13, 418);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(185, 21);
+            this.textBox2.TabIndex = 20;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPressed);
+            // 
+            // chartForm2
+            // 
+            this.chartForm2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chartForm2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.chartForm2.Location = new System.Drawing.Point(13, 82);
+            this.chartForm2.Margin = new System.Windows.Forms.Padding(4);
+            this.chartForm2.Name = "chartForm2";
+            this.chartForm2.Size = new System.Drawing.Size(1147, 319);
+            this.chartForm2.TabIndex = 5;
+            this.chartForm2.Load += new System.EventHandler(this.chartForm2_Load);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1142, 689);
+            this.ClientSize = new System.Drawing.Size(1173, 720);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.errorListView);
-            this.Controls.Add(this.counterLabel);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.previousBtn);
-            this.Controls.Add(this.m_dataLabel);
-            this.Controls.Add(this.m_dataLengthLabel);
-            this.Controls.Add(this.m_addressLabel);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.m_lineLabel);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.chartForm2);
             this.Controls.Add(this.toolStrip1);
@@ -493,6 +456,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Closed += new System.EventHandler(this.frmFileDisposal_Closed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -509,9 +473,13 @@
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripButton StartButton;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox2;
+        private System.Windows.Forms.ToolStripButton ZoomInBtn;
+        private System.Windows.Forms.ToolStripButton zoomOutBtn;
+
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem startToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
@@ -536,25 +504,19 @@
         private System.Windows.Forms.ToolStripMenuItem 检查程序版本ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 检查网络版本ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 帮助HToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 关于软件ToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripReceivedBytesLabel;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label m_lineLabel;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label m_addressLabel;
-        private System.Windows.Forms.Label m_dataLengthLabel;
-        private System.Windows.Forms.Label m_dataLabel;
-        private System.Windows.Forms.Button previousBtn;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Label counterLabel;
         private System.Windows.Forms.ListView errorListView;
-        private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripTextBox toolStripTextBox2;
+
+        private System.Windows.Forms.TextBox textBox1;
+        private TextBox textBox2;
+        private ToolStripMenuItem 本地更新ToolStripMenuItem;
+        private ToolStripButton ContinueStartBtn;
+        private ToolStripButton stopBtn;
+        private ToolStripButton ShowAllBtn;
+        private ToolStripProgressBar toolStripProgressBar1;
+        private ToolStripMenuItem 关于软件ToolStripMenuItem;
     }
 }
 

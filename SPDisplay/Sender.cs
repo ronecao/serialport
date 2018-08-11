@@ -18,10 +18,13 @@ namespace SPDisplay
 
     public delegate void UpdateErrorList(String d);
 
+    
+
     //public delegate void ThreadCallBackDelegate(string msg);
     class Sender
     {
-       public SerialPortControl sp1;
+        public static byte[] m_ReceivedData;
+        public SerialPortControl sp1;
         public ThreadCallBackDelegate callback;
         public ThreadCallBackFinished finishCallback;
         public void Dispose() {
@@ -34,8 +37,8 @@ namespace SPDisplay
             
         }
 
-        public void initSerialPort(String name, String baudratestr, String paritystr, String databitstr, String stopbitstr){
-            sp1 = new SerialPortControl( name,  baudratestr,  paritystr,  databitstr, stopbitstr);
+        public void initSerialPort(String name, String baudratestr, String paritystr, String databitstr, String stopbitstr,String ReadingTimeout){
+            sp1 = new SerialPortControl( name,  baudratestr,  paritystr,  databitstr, stopbitstr,ReadingTimeout);
 		}
         public int OpenPort() {
             
@@ -120,36 +123,17 @@ namespace SPDisplay
                 byte[] newdata = new byte[downRecvData.Count];
                 newdata = (byte[])downRecvData.ToArray(typeof(byte));
                 Utils.dumpdata(newdata, newdata.Length, "receiveddata");
-				return Downunpackdata(newdata, newdata.Length);
+				return Downunpackdata(newdata,(ulong) newdata.Length);
             }
             return null;
         }
 
-        public ArrayList Receivedatatest() {
-
-            byte dataresult = 0;
-            int packagestatus = -1;
-            ReceiverRest();
-            int recvresult;
-            int readStatus = -4;
-            byte[] result = new byte[1024 * 1024 * 20];
+        public byte[] Receivedatatest() {
+            byte[] result = new byte[1024 * 1024 * 10];
             int counter=0;
             int oneTimeCounter = 0;
-            /*result =sp1.Read( out recvresult);
-            Console.WriteLine("recvlenght" + recvresult +"buffersize"+ sp1.sp1.ReadBufferSize);
-            return null;*/
-            TimeSpan ts1 = Process.GetCurrentProcess().TotalProcessorTime;
-            Stopwatch stw = new Stopwatch();
-            stw.Start();
             while (true) {
-                /* dataresult = sp1.ReadByte(out readStatus);
-                 if (readStatus == RECVSUCC) {
-                     recvresult = SaveReceiverData(dataresult);
-                 }
-                 else {
-                     Console.WriteLine("readStatus" + readStatus);
-                     break; 
-                 }*/
+
                 try {
                     oneTimeCounter = sp1.sp1.Read(result, counter, 1024 * 12);
                     counter = counter + oneTimeCounter;
@@ -160,27 +144,26 @@ namespace SPDisplay
                     
                         Console.WriteLine("counter:" + counter);
                     try {
-                        ArrayList a = Downunpackdata(result, counter);
-                        double Msecs = Process.GetCurrentProcess().TotalProcessorTime.Subtract(ts1).TotalMilliseconds;
-                        stw.Stop();
-                        Console.WriteLine(string.Format("循环次数:{0} CPU时间(毫秒)={1} 实际时间(毫秒)={2}", downRecvDataCounter, Msecs, stw.Elapsed.TotalMilliseconds, stw.ElapsedTicks));
-                        Console.WriteLine(string.Format("1 tick = {0}毫秒", stw.Elapsed.TotalMilliseconds / stw.Elapsed.Ticks));
+
+                        byte[] a = new byte[counter];
+                        Buffer.BlockCopy(result, 0, a, 0, counter);
+                       
                         return a;
 
                     }
                     catch (Exception es) {
-                        updateErrorListCallback("Exceptions on Downunpack " + es.ToString());
+                        
                         return null;
                     } 
                   
                   
-                    break;
+                 
 
                 }
                
 
             }
-            return null;
+            
         }
 
 
@@ -234,14 +217,21 @@ namespace SPDisplay
                     Console.WriteLine("readStatus" + e.ToString());
 
                     Console.WriteLine("counter:" + counter);
+                    if (counter == 0) {
+                        Msecs = Process.GetCurrentProcess().TotalProcessorTime.Subtract(ts1).TotalMilliseconds;
+                        stw.Stop();
+                        Console.WriteLine(string.Format("循环次数:{0} CPU时间(毫秒)={1} 实际时间(毫秒)={2}", downRecvDataCounter, Msecs, stw.Elapsed.TotalMilliseconds, stw.ElapsedTicks));
+                        Console.WriteLine(string.Format("1 tick = {0}毫秒", stw.Elapsed.TotalMilliseconds / stw.Elapsed.Ticks));
+                        finishCallback(null);
+                        break;
+                    }
+                    m_ReceivedData = new byte[counter];
+                    Buffer.BlockCopy(result, 0, m_ReceivedData, 0, counter);
 
-                    ArrayList a = Downunpackdata(result, counter);
-                    Msecs = Process.GetCurrentProcess().TotalProcessorTime.Subtract(ts1).TotalMilliseconds;
-                    stw.Stop();
-                    Console.WriteLine(string.Format("循环次数:{0} CPU时间(毫秒)={1} 实际时间(毫秒)={2}", downRecvDataCounter, Msecs, stw.Elapsed.TotalMilliseconds, stw.ElapsedTicks));
-                    Console.WriteLine(string.Format("1 tick = {0}毫秒", stw.Elapsed.TotalMilliseconds / stw.Elapsed.Ticks));
-                    
+                    ArrayList a = Downunpackdata(result, (ulong)counter);
                     finishCallback(a);
+
+
 
                     break;
 

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace SPDisplay {
     public class DataCell {
         public int line;
-        public int address;
-        public int datalength;
+        public ulong address;
+        public ulong datalength;
         public byte[] data;
     }
 }

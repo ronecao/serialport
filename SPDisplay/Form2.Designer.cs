@@ -44,7 +44,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(31, 65);
+            this.label1.Location = new System.Drawing.Point(31, 36);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 15);
             this.label1.TabIndex = 0;
@@ -53,12 +53,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(31, 101);
+            this.label2.Location = new System.Drawing.Point(31, 65);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(52, 15);
+            this.label2.Size = new System.Drawing.Size(67, 15);
             this.label2.TabIndex = 1;
-            this.label2.Text = "波特率";
-            this.label2.Visible = false;
+            this.label2.Text = "读取超时";
             // 
             // label3
             // 
@@ -113,18 +112,16 @@
             // 
             // brateText
             // 
-            this.brateText.Enabled = false;
-            this.brateText.Location = new System.Drawing.Point(110, 98);
+            this.brateText.Location = new System.Drawing.Point(110, 62);
             this.brateText.Name = "brateText";
             this.brateText.Size = new System.Drawing.Size(157, 25);
             this.brateText.TabIndex = 9;
-            this.brateText.Visible = false;
             this.brateText.TextChanged += new System.EventHandler(this.brateText_TextChanged);
             // 
             // portlistCombo
             // 
             this.portlistCombo.FormattingEnabled = true;
-            this.portlistCombo.Location = new System.Drawing.Point(110, 56);
+            this.portlistCombo.Location = new System.Drawing.Point(110, 27);
             this.portlistCombo.Name = "portlistCombo";
             this.portlistCombo.Size = new System.Drawing.Size(157, 23);
             this.portlistCombo.TabIndex = 11;
@@ -166,7 +163,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 163);
+            this.ClientSize = new System.Drawing.Size(351, 133);
             this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.PairtyCombo);
             this.Controls.Add(this.stopBitCombo);

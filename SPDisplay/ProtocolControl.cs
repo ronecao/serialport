@@ -10,7 +10,7 @@ using static SPDisplay.Utils;
 namespace SPDisplay {
     class ProtocolControl {
 
-        public enum REQTYPE { NONE, ERROR, FIND, DATA, VERSION };
+        public enum REQTYPE { NONE, ERROR, FIND, DATA, VERSION, LOCALUPDATE };
         static readonly byte[] upheader = new byte[3] { 0x81, 0x06, 0x09 };
         static readonly byte[] downheader = new byte[4] { 0xFF, 0xFF, 0x87, 0x7E };
         static readonly byte[] downtail = new byte[3] { 0x00, 0xFF, 0xFF };
@@ -46,19 +46,48 @@ namespace SPDisplay {
         /*
          * 重置sender数据
          */
-        public static void SenderRest() {
-            upRecvDataCounter = 0;
-            upRecvData = new ArrayList();
+
+        public static int FindDownHeaderVersion(byte[] data, int inlength) {
+            byte[] a = new byte[3];
+            byte[] key = new byte[] { 0x87, 0x7e, 0x45 };
+            for (int i = 0; i < inlength - 3; i++) {
+                Buffer.BlockCopy(data, i, a, 0, 3);
+                if (SameArray(a, key)) {
+                    return i;
+                }
+            }
+            return -1;
         }
         private static int FindDownHeader(byte[] data, int inlength) {
             byte[] a = new byte[3];
             byte[] key = new byte[] {0x87,0x7e,0x23};
-             for (int i = 0; i< inlength-3; inlength++) {
+             for (int i = 0; i< inlength-3; i++) {
                 Buffer.BlockCopy(data, i, a, 0, 3);
-                if (SameArray(a, a)) {
+                if (SameArray(a, key)) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        private static int FindDownHeaderHandShake(byte[] data, int inlength, out REQTYPE type) {
+            byte[] a = new byte[3];
+            byte[] key = new byte[] { 0x87, 0x7e, 03 };
+            for (int i = 0; i < inlength - 3; i++) {
+                Buffer.BlockCopy(data, i, a, 0, 3);
+                if (SameArray(a, key)) {
+                    type = REQTYPE.FIND;
                     return i+3;
                 }
             }
+            byte[] key2 = new byte[] { 0x87, 0x7e, 0x13 };
+            for (int i = 0; i < inlength - 3; i++) {
+                Buffer.BlockCopy(data, i, a, 0, 3);
+                if (SameArray(a, key2)) {
+                    type = REQTYPE.LOCALUPDATE;
+                    return i + 3;
+                }
+            }
+            type = REQTYPE.NONE;
             return -1;
         }
         private static int FindeNewFrame(byte[] data, int start,int length) {
@@ -100,26 +129,26 @@ namespace SPDisplay {
         /*
          * Receiver数据解包
          */
-        public static ArrayList Downunpackdata(byte[] data, int length) {
+        public static ArrayList Downunpackdata(byte[] data, ulong length) {
 
             int line;
-            int loc = 0;
-            int datalength = 0;
+            ulong loc = 0;
+            ulong datalength = 0;
             ArrayList datavalue = new ArrayList();
-            int i = FindDownHeader(data, length);
+            ulong i = (ulong)FindDownHeader(data, (int)length);
             if (i < 0) {
                 updateErrorListCallback("no header found");
                 return null;
             }
-            i = i + 2;
+            i = i + 3;
             //dumpdata(data, length, "recev");
             Console.WriteLine("header end loc"+ i);
             String log = "";
             for ( ; i < length - 10; i++) {
                 line = data[i];
                 if (line < 0x31 || line > 0x36) {
-                    i = FindeNewFrame(data, i, length);
-                    if (i > 0) {
+                    i = (ulong)FindeNewFrame(data, (int)i, (int)length);
+                    if (i < length) {
                         line = data[i];
                         updateErrorListCallback("数据错误 line");
                     }
@@ -136,13 +165,13 @@ namespace SPDisplay {
                 //Console.WriteLine("Line=" + data[i]);
                 i++;
                 log = data[i].ToString("X2");
-                loc = loc + data[i] * 256 * 256 * 256;
+                loc = loc + (ulong)data[i] * 256 * 256 * 256;
                 i++;
                 log = log + data[i].ToString("X2");
-                loc = loc + data[i] * 256 * 256;
+                loc = loc + (ulong)data[i] * 256 * 256;
                 i++;
                 log = log + data[i].ToString("X2");
-                loc = loc + data[i] * 256;
+                loc = loc + (ulong)data[i] * 256;
                 i++;
                 log = log + data[i].ToString("X2");
                 loc = loc + data[i];
@@ -151,13 +180,13 @@ namespace SPDisplay {
                 //Console.WriteLine("location:" + loc);
                 cell.address = loc;
                 log = data[i].ToString("X2");
-                datalength = datalength + data[i] * 256 * 256 * 256;
+                datalength = datalength + (ulong)data[i] * 256 * 256 * 256;
                 i++;
                 log = log + data[i].ToString("X2");
-                datalength = datalength + data[i] * 256 * 256;
+                datalength = datalength + (ulong)data[i] * 256 * 256;
                 i++;
                 log = log + data[i].ToString("X2");
-                datalength = datalength + data[i] * 256;
+                datalength = datalength + (ulong)data[i] * 256;
                 i++;
                 log = log + data[i].ToString("X2");
                 datalength = datalength + data[i];
@@ -172,7 +201,7 @@ namespace SPDisplay {
                 
                 //Console.WriteLine("datalengt:"+log);
                // Console.WriteLine("datalenght" + datalength);
-                int c = i;
+                ulong c = i;
                 int j = 0;
                 cell.data = new byte[datalength];
                 String valuestr = " ";
@@ -191,7 +220,7 @@ namespace SPDisplay {
                 //Console.WriteLine(" ");
 
                 //showvalue(line, loc, valuestr);
-                byte crcres = CRCSUM(cell.data, datalength);
+                byte crcres = CRCSUM(cell.data,(int) datalength);
                 Console.WriteLine("CRC1" + data[i].ToString("X2") + "res:" +crcres.ToString("X2") );
                 //updateErrorListCallback("CRC1" + data[i].ToString("X2") + "res:" + crcres.ToString("X2"));
                 if (crcres == data[i]) {
@@ -221,20 +250,18 @@ namespace SPDisplay {
             return datavalue;
         }
 
-        public static REQTYPE Upunpackdata(byte[] data) {
-
-            switch (data[3]) {
-                case 0x15:
-                    return REQTYPE.ERROR;
-                case 0x25:
-                    return REQTYPE.FIND;
-                case 0x35:
-                    return REQTYPE.DATA;
-                case 0x45:
-                    return REQTYPE.VERSION;
+        public static byte[] UnpackHandShake(byte[] data, out REQTYPE type) {
+            byte[] result = new byte[2];
+          int loc= FindDownHeaderHandShake(data, data.Length,out type);
+            if (loc > 0 && type != REQTYPE.NONE) {
+                result[0] = data[loc];
+                result[1] = data[loc + 1];
+            }
+            else {
+                return null;
             }
 
-            return REQTYPE.NONE;
+            return result;
         }
         //up->down
         public static byte[] Packrequest(REQTYPE type, byte[] value) {
@@ -271,25 +298,7 @@ namespace SPDisplay {
             return returnvalue;
         }
 
-        public static byte[] PackResponse(REQTYPE type, byte[] value, out int datalength) {
-            switch (type) {
-                case REQTYPE.DATA:
-                    //case REQTYPE.ERROR:
-                    return PackDataAll(value, out datalength);
-                case REQTYPE.VERSION:
-                    return PackVersion(out datalength);
-                case REQTYPE.FIND:
-                    datalength = 7;
-                    return PackFindRes(value);
-            }
-            datalength = 0;
-            return null;
 
-        }
-
-        public static byte[] PackDataHeader() {
-            return new byte[] { 0xFF, 0xFF, 0x87, 0x7E, 0x23 };
-        }
         public static byte[] PackDataTail() {
             return new byte[] { 0xFF, 0xFF, 0x87, 0x7E, 0x29, 0x36, 0x00, 0x00, 0xFF, 0xFF };
         }
@@ -321,88 +330,10 @@ namespace SPDisplay {
             return datavalue;
         }
 
-        private static byte[] PackVersion(out int datalength) {
-            byte[] returnvalue = new byte[7];
-            System.Buffer.BlockCopy(upheader, 0, returnvalue, 0, 3);
-            returnvalue[3] = 0x45;
-            returnvalue[4] = 0x01;
-            returnvalue[5] = 0x02;
-            returnvalue[6] = CRCSUM(returnvalue, 6);
-            datalength = 7;
-            return returnvalue;
-        }
+       
 
-        private static byte[] PackFindRes(byte[] value) {
-            byte[] returnvalue = new byte[7];
-            System.Buffer.BlockCopy(upheader, 0, returnvalue, 0, 3);
-            returnvalue[3] = 0x25;
-            returnvalue[4] = (byte)~value[0];
-            returnvalue[5] = (byte)~value[1];
-            returnvalue[6] = CRCSUM(returnvalue, 6);
-            return returnvalue;
-        }
-        private static byte[] PackDataAll(byte[] value, out int datalength) {
-            int x = value[0];
-            int y = value[1];
-            byte[] body;
-            int bodaylegth;
-            byte[] datavalue = new byte[15 + 17 * x * y];
-            Buffer.BlockCopy(downheader, 0, datavalue, 0, 4);
-            int counter = 4;
-            datavalue[counter] = 0x23;
-            counter++;
-            for (int i = 0; i < x; i++) {
-                for (int j = 0; j < y; j++) {
-                    body = PackDatabody(out bodaylegth);
-                    Buffer.BlockCopy(body, 0, datavalue, counter, bodaylegth);
-                    counter = counter + bodaylegth;
-                }
-            }
-            Buffer.BlockCopy(PackDataTail(), 0, datavalue, counter, 10);
-            counter = counter + 10;
-            datalength = counter;
-            return datavalue;
-        }
-
-        public static int SaveSenderData(byte datain) {
-            //当首字符不是0xff 非法数据丢
-            if (upRecvDataCounter == 0 && datain != 0x81) {
-                Console.WriteLine("数据非法丢弃");
-                return RECVTRACH;
-            }
-            upRecvData.Add(datain);
-            upRecvDataCounter++;
-            if (upRecvDataCounter == 3) {
-                byte[] temp = new byte[upRecvData.Count];
-                temp = (byte[])upRecvData.ToArray(typeof(byte));
-                dumpdata(temp, temp.Length, "temp");
-
-                if (temp[1] == 0x06 && temp[2] == 0x09) {
-                    //status = recState.bodyframe;
-                    Console.WriteLine("找到包头");
-                    return RECVHEADER;
-                }
-                else {
-                    upRecvData.RemoveAt(0);
-                    upRecvDataCounter--;
-                }
-            }
-            if (upRecvDataCounter == 7) {
-                byte[] temp = new byte[upRecvData.Count];
-                temp = (byte[])upRecvData.ToArray(typeof(byte));
-                byte crc = CRCSUM(temp, 6);
-                Console.Write(crc.ToString("X2"));
-                if (crc == temp[6]) {
-                    return RECVEND;
-                }
-                else {
-                    SenderRest();
-                    return RECVCRC;
-                }
-            }
-
-            return RECVSUCC;
-        }
+       
+    
 
         public static int SaveReceiverData(byte datain) {
            
