@@ -9,7 +9,9 @@ using static SPDisplay.Utils;
 
 namespace SPDisplay {
     class ProtocolControl {
-
+        public static int TOTALADDRES = 268435455;
+        public static byte[] L1Control = new byte[TOTALADDRES];
+        public static ArrayList L1Data = new ArrayList();
         public enum REQTYPE { NONE, ERROR, FIND, DATA, VERSION, LOCALUPDATE };
         static readonly byte[] upheader = new byte[3] { 0x81, 0x06, 0x09 };
         static readonly byte[] downheader = new byte[4] { 0xFF, 0xFF, 0x87, 0x7E };
@@ -29,7 +31,7 @@ namespace SPDisplay {
         public static ArrayList downTailData = new ArrayList(10);
 
 
-
+        //status bar 错误显示 线程调用
         public static UpdateErrorList updateErrorListCallback;
 
 
@@ -58,6 +60,9 @@ namespace SPDisplay {
             }
             return -1;
         }
+        /*
+         * 找到数据包头
+         */
         private static int FindDownHeader(byte[] data, int inlength) {
             byte[] a = new byte[3];
             byte[] key = new byte[] {0x87,0x7e,0x23};
@@ -69,6 +74,9 @@ namespace SPDisplay {
             }
             return -1;
         }
+        /*
+        * 找到握手包头
+        */
         private static int FindDownHeaderHandShake(byte[] data, int inlength, out REQTYPE type) {
             byte[] a = new byte[3];
             byte[] key = new byte[] { 0x87, 0x7e, 03 };
@@ -90,6 +98,9 @@ namespace SPDisplay {
             type = REQTYPE.NONE;
             return -1;
         }
+        /*
+         * 查找新行数据，用于发现数据有问题
+         */
         private static int FindeNewFrame(byte[] data, int start,int length) {
 
             byte[] temp = new byte[length];
@@ -132,23 +143,28 @@ namespace SPDisplay {
         public static ArrayList Downunpackdata(byte[] data, ulong length) {
 
             int line;
-            ulong loc = 0;
-            ulong datalength = 0;
+            int loc = 0;
+            int datalength = 0;
+            int lLen = (int)length;
             ArrayList datavalue = new ArrayList();
-            ulong i = (ulong)FindDownHeader(data, (int)length);
+            int i = FindDownHeader(data, (int)length);
             if (i < 0) {
                 updateErrorListCallback("no header found");
                 return null;
             }
             i = i + 3;
+            for (int r = 0; r < TOTALADDRES; r++) {
+                L1Control[r] = 0x01;
+            }
+            L1Data = new ArrayList();
             //dumpdata(data, length, "recev");
             Console.WriteLine("header end loc"+ i);
             String log = "";
-            for ( ; i < length - 10; i++) {
+            for ( ; i < (int)length - 10; i++) {
                 line = data[i];
                 if (line < 0x31 || line > 0x36) {
-                    i = (ulong)FindeNewFrame(data, (int)i, (int)length);
-                    if (i < length) {
+                    i = FindeNewFrame(data, i, (int)length);
+                    if (i < lLen) {
                         line = data[i];
                         updateErrorListCallback("数据错误 line");
                     }
@@ -165,33 +181,31 @@ namespace SPDisplay {
                 //Console.WriteLine("Line=" + data[i]);
                 i++;
                 log = data[i].ToString("X2");
-                loc = loc + (ulong)data[i] * 256 * 256 * 256;
+                loc = loc + data[i] * 256 * 256 * 256;
                 i++;
                 log = log + data[i].ToString("X2");
-                loc = loc + (ulong)data[i] * 256 * 256;
+                loc = loc + data[i] * 256 * 256;
                 i++;
                 log = log + data[i].ToString("X2");
-                loc = loc + (ulong)data[i] * 256;
+                loc = loc + data[i] * 256;
                 i++;
                 log = log + data[i].ToString("X2");
                 loc = loc + data[i];
                 i++;
-                //Console.WriteLine("location:" + log);
-                //Console.WriteLine("location:" + loc);
                 cell.address = loc;
                 log = data[i].ToString("X2");
-                datalength = datalength + (ulong)data[i] * 256 * 256 * 256;
+                datalength = datalength + data[i] * 256 * 256 * 256;
                 i++;
                 log = log + data[i].ToString("X2");
-                datalength = datalength + (ulong)data[i] * 256 * 256;
+                datalength = datalength + data[i] * 256 * 256;
                 i++;
                 log = log + data[i].ToString("X2");
-                datalength = datalength + (ulong)data[i] * 256;
+                datalength = datalength + data[i] * 256;
                 i++;
                 log = log + data[i].ToString("X2");
                 datalength = datalength + data[i];
                 i++;
-                if (datalength + i > length|| datalength<0) {
+                if (datalength + i > lLen || datalength<0) {
                    
                         updateErrorListCallback("数据长度错误丢弃");
                     
@@ -201,7 +215,7 @@ namespace SPDisplay {
                 
                 //Console.WriteLine("datalengt:"+log);
                // Console.WriteLine("datalenght" + datalength);
-                ulong c = i;
+                int c = i;
                 int j = 0;
                 cell.data = new byte[datalength];
                 String valuestr = " ";
@@ -209,7 +223,13 @@ namespace SPDisplay {
                 for (; i < c + datalength; i++) {
                     //Console.Write(data[i].ToString("X2"));
 
-                   // Console.Write(" ");
+                    // Console.Write(" ");
+                    if (line != 0x31){
+                        
+                            L1Control[cell.address + j] = 0;
+
+                       
+                    }
                     valuestr = valuestr + data[i].ToString("X2") + " ";
                     
                     
@@ -224,7 +244,14 @@ namespace SPDisplay {
                 Console.WriteLine("CRC1" + data[i].ToString("X2") + "res:" +crcres.ToString("X2") );
                 //updateErrorListCallback("CRC1" + data[i].ToString("X2") + "res:" + crcres.ToString("X2"));
                 if (crcres == data[i]) {
-                    datavalue.Add(cell);
+                    if (line == 0x31) {
+                        L1Data.Add(cell);
+                    }
+                    else {
+                        datavalue.Add(cell);
+                    }
+
+                    
                     i++;
                     i = i + 2;
                     //Console.WriteLine("******************************" + i);
@@ -233,7 +260,12 @@ namespace SPDisplay {
                     //updateErrorListCallback("Data Added");
                 }
                 else {
-                    datavalue.Add(cell);
+                    if (line == 0x31) {
+                        L1Data.Add(cell);
+                    }
+                    else {
+                        datavalue.Add(cell);
+                    }
                     Console.WriteLine("CRCWRONG");
                     //updateErrorListCallback("Data Added with CRCERROR");
                     i++;
@@ -249,7 +281,9 @@ namespace SPDisplay {
             }
             return datavalue;
         }
-
+        /*
+         * 解压缩握手包
+         */
         public static byte[] UnpackHandShake(byte[] data, out REQTYPE type) {
             byte[] result = new byte[2];
           int loc= FindDownHeaderHandShake(data, data.Length,out type);
@@ -263,7 +297,7 @@ namespace SPDisplay {
 
             return result;
         }
-        //up->down
+        //打包请求数据
         public static byte[] Packrequest(REQTYPE type, byte[] value) {
             byte[] returnvalue = new byte[7];
             returnvalue[0] = upheader[0];

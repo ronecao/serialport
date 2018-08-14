@@ -73,22 +73,20 @@
       <DependentUpon>LocalUpdateForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ProtocolControl.cs" />
+    <Compile Include="RemoteVersion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RemoteVersion.Designer.cs">
+      <DependentUpon>RemoteVersion.cs</DependentUpon>
+    </Compile>
     <Compile Include="SerialPortControl.cs" />
-    <Compile Include="ThreadController.cs" />
-    <Compile Include="ThreadForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ThreadForm.Designer.cs">
-      <DependentUpon>ThreadForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Utils.cs" />
-    <Compile Include="Form2.cs">
+    <Compile Include="DeviceSetupForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <Compile Include="DeviceSetupForm.Designer.cs">
+      <DependentUpon>DeviceSetupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProcessPort.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,8 +98,8 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <EmbeddedResource Include="DeviceSetupForm.resx">
+      <DependentUpon>DeviceSetupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
@@ -123,8 +121,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ThreadForm.resx">
-      <DependentUpon>ThreadForm.cs</DependentUpon>
+    <EmbeddedResource Include="RemoteVersion.resx">
+      <DependentUpon>RemoteVersion.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

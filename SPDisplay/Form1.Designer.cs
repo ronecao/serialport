@@ -69,10 +69,17 @@ namespace SPDisplay
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripReceivedBytesLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.errorListView = new System.Windows.Forms.ListView();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.commandText = new System.Windows.Forms.TextBox();
             this.chartForm2 = new _5SeriesChart.ChartForm();
+            this.cmdSendBtn = new System.Windows.Forms.Button();
+            this.L1TextBox = new System.Windows.Forms.TextBox();
+            this.L15TextBox = new System.Windows.Forms.TextBox();
+            this.L2TextBox = new System.Windows.Forms.TextBox();
+            this.L3TextBox = new System.Windows.Forms.TextBox();
+            this.L4TextBox = new System.Windows.Forms.TextBox();
+            this.L5TextBox = new System.Windows.Forms.TextBox();
             this.toolStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -97,7 +104,6 @@ namespace SPDisplay
             this.toolStrip1.Size = new System.Drawing.Size(1173, 33);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
-            this.toolStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip1_ItemClicked);
             // 
             // StartButton
             // 
@@ -148,7 +154,6 @@ namespace SPDisplay
             this.toolStripTextBox2.Name = "toolStripTextBox2";
             this.toolStripTextBox2.Size = new System.Drawing.Size(100, 33);
             this.toolStripTextBox2.Text = "1";
-            this.toolStripTextBox2.Click += new System.EventHandler(this.toolStripTextBox2_Click);
             this.toolStripTextBox2.TextChanged += new System.EventHandler(this.Value2TextChanged);
             // 
             // ZoomInBtn
@@ -190,7 +195,6 @@ namespace SPDisplay
             this.设置ToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(112, 52);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // startToolStripMenuItem
             // 
@@ -228,7 +232,6 @@ namespace SPDisplay
             this.FileToolStripMenuItem.Name = "FileToolStripMenuItem";
             this.FileToolStripMenuItem.Size = new System.Drawing.Size(69, 24);
             this.FileToolStripMenuItem.Text = "文件(F)";
-            this.FileToolStripMenuItem.Click += new System.EventHandler(this.FileToolStripMenuItem_Click);
             // 
             // OpenFileToolStripMenuItem
             // 
@@ -335,6 +338,7 @@ namespace SPDisplay
             this.检查网络版本ToolStripMenuItem.Name = "检查网络版本ToolStripMenuItem";
             this.检查网络版本ToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.检查网络版本ToolStripMenuItem.Text = "检查网络版本";
+            this.检查网络版本ToolStripMenuItem.Click += new System.EventHandler(this.检查网络版本ToolStripMenuItem_Click);
             // 
             // 本地更新ToolStripMenuItem
             // 
@@ -374,7 +378,8 @@ namespace SPDisplay
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripReceivedBytesLabel,
-            this.toolStripProgressBar1});
+            this.toolStripProgressBar1,
+            this.toolStripStatusLabel2});
             this.statusStrip1.Location = new System.Drawing.Point(0, 695);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1173, 25);
@@ -392,24 +397,22 @@ namespace SPDisplay
             this.toolStripReceivedBytesLabel.Name = "toolStripReceivedBytesLabel";
             this.toolStripReceivedBytesLabel.Size = new System.Drawing.Size(115, 20);
             this.toolStripReceivedBytesLabel.Text = "ReceivedBytes";
-            this.toolStripReceivedBytesLabel.Click += new System.EventHandler(this.toolStripReceivedBytesLabel_Click);
             // 
             // toolStripProgressBar1
             // 
             this.toolStripProgressBar1.Name = "toolStripProgressBar1";
             this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 19);
             // 
-            // errorListView
+            // toolStripStatusLabel2
             // 
-            this.errorListView.Location = new System.Drawing.Point(537, 364);
-            this.errorListView.Name = "errorListView";
-            this.errorListView.Size = new System.Drawing.Size(534, 258);
-            this.errorListView.TabIndex = 18;
-            this.errorListView.UseCompatibleStateImageBehavior = false;
-            this.errorListView.Visible = false;
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 20);
             // 
             // textBox1
             // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Location = new System.Drawing.Point(12, 445);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
@@ -418,16 +421,14 @@ namespace SPDisplay
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPressed);
             // 
-            // textBox2
+            // commandText
             // 
-            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.textBox2.Font = new System.Drawing.Font("宋体", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBox2.Location = new System.Drawing.Point(13, 418);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(185, 21);
-            this.textBox2.TabIndex = 20;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPressed);
+            this.commandText.Font = new System.Drawing.Font("宋体", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.commandText.Location = new System.Drawing.Point(13, 415);
+            this.commandText.Name = "commandText";
+            this.commandText.Size = new System.Drawing.Size(185, 21);
+            this.commandText.TabIndex = 20;
+            this.commandText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.commandText_KeyPressed);
             // 
             // chartForm2
             // 
@@ -435,20 +436,89 @@ namespace SPDisplay
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartForm2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.chartForm2.Location = new System.Drawing.Point(13, 82);
-            this.chartForm2.Margin = new System.Windows.Forms.Padding(4);
+            this.chartForm2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chartForm2.Name = "chartForm2";
             this.chartForm2.Size = new System.Drawing.Size(1147, 319);
             this.chartForm2.TabIndex = 5;
-            this.chartForm2.Load += new System.EventHandler(this.chartForm2_Load);
+            // 
+            // cmdSendBtn
+            // 
+            this.cmdSendBtn.Location = new System.Drawing.Point(204, 409);
+            this.cmdSendBtn.Name = "cmdSendBtn";
+            this.cmdSendBtn.Size = new System.Drawing.Size(88, 30);
+            this.cmdSendBtn.TabIndex = 21;
+            this.cmdSendBtn.Text = "发送";
+            this.cmdSendBtn.UseVisualStyleBackColor = true;
+            this.cmdSendBtn.Click += new System.EventHandler(this.cmdSendBtn_Click);
+            // 
+            // L1TextBox
+            // 
+            this.L1TextBox.Location = new System.Drawing.Point(53, 110);
+            this.L1TextBox.Name = "L1TextBox";
+            this.L1TextBox.Size = new System.Drawing.Size(100, 25);
+            this.L1TextBox.TabIndex = 22;
+            this.L1TextBox.Visible = false;
+            this.L1TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.L1TextBox_KeyPressed);
+            // 
+            // L15TextBox
+            // 
+            this.L15TextBox.Location = new System.Drawing.Point(53, 168);
+            this.L15TextBox.Name = "L15TextBox";
+            this.L15TextBox.Size = new System.Drawing.Size(100, 25);
+            this.L15TextBox.TabIndex = 23;
+            this.L15TextBox.Visible = false;
+            this.L15TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.L15TextBox_KeyPressed);
+            // 
+            // L2TextBox
+            // 
+            this.L2TextBox.Location = new System.Drawing.Point(53, 213);
+            this.L2TextBox.Name = "L2TextBox";
+            this.L2TextBox.Size = new System.Drawing.Size(100, 25);
+            this.L2TextBox.TabIndex = 24;
+            this.L2TextBox.Visible = false;
+            this.L2TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.L2TextBox_KeyPressed);
+            // 
+            // L3TextBox
+            // 
+            this.L3TextBox.Location = new System.Drawing.Point(53, 258);
+            this.L3TextBox.Name = "L3TextBox";
+            this.L3TextBox.Size = new System.Drawing.Size(100, 25);
+            this.L3TextBox.TabIndex = 25;
+            this.L3TextBox.Visible = false;
+            this.L3TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.L3TextBox_KeyPressed);
+            // 
+            // L4TextBox
+            // 
+            this.L4TextBox.Location = new System.Drawing.Point(53, 304);
+            this.L4TextBox.Name = "L4TextBox";
+            this.L4TextBox.Size = new System.Drawing.Size(100, 25);
+            this.L4TextBox.TabIndex = 26;
+            this.L4TextBox.Visible = false;
+            this.L4TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.L4TextBox_KeyPressed);
+            // 
+            // L5TextBox
+            // 
+            this.L5TextBox.Location = new System.Drawing.Point(53, 350);
+            this.L5TextBox.Name = "L5TextBox";
+            this.L5TextBox.Size = new System.Drawing.Size(100, 25);
+            this.L5TextBox.TabIndex = 27;
+            this.L5TextBox.Visible = false;
+            this.L5TextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.L5TextBox_KeyPressed);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1173, 720);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.L5TextBox);
+            this.Controls.Add(this.L4TextBox);
+            this.Controls.Add(this.L3TextBox);
+            this.Controls.Add(this.L2TextBox);
+            this.Controls.Add(this.L15TextBox);
+            this.Controls.Add(this.L1TextBox);
+            this.Controls.Add(this.cmdSendBtn);
+            this.Controls.Add(this.commandText);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.errorListView);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.chartForm2);
             this.Controls.Add(this.toolStrip1);
@@ -507,16 +577,23 @@ namespace SPDisplay
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripReceivedBytesLabel;
-        private System.Windows.Forms.ListView errorListView;
 
         private System.Windows.Forms.TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox commandText;
         private ToolStripMenuItem 本地更新ToolStripMenuItem;
         private ToolStripButton ContinueStartBtn;
         private ToolStripButton stopBtn;
         private ToolStripButton ShowAllBtn;
         private ToolStripProgressBar toolStripProgressBar1;
         private ToolStripMenuItem 关于软件ToolStripMenuItem;
+        private ToolStripStatusLabel toolStripStatusLabel2;
+        private Button cmdSendBtn;
+        private TextBox L1TextBox;
+        private TextBox L15TextBox;
+        private TextBox L2TextBox;
+        private TextBox L3TextBox;
+        private TextBox L4TextBox;
+        private TextBox L5TextBox;
     }
 }
 

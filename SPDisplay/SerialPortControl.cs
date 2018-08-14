@@ -11,6 +11,9 @@ namespace SPDisplay {
         private readonly int SUCC = 0;
         public SerialPort sp1;
        
+        /*
+         * 初始化串口
+         */
         public SerialPortControl(String name, String baudratestr, String paritystr, String databitstr, String stopbitstr,String readtimeout) {
             sp1 = new SerialPort();
             sp1.PortName = name;
@@ -58,6 +61,14 @@ namespace SPDisplay {
             sp1.ReadBufferSize = 1024 * 1024 * 8;
         }
 
+        /*
+         * 
+         * 打开串口， 
+         * 0 成功
+         * -1 访问背阻止
+         * -2 没有这个端口
+         * -3 其他错误
+         */
         public int OpenPort() {
             try {
                 sp1.Open();
@@ -125,6 +136,9 @@ namespace SPDisplay {
              }
 
         }
+        /*
+         * 写数据
+         */
         public int WriteData(byte[] data, int length) {
             try {
                 sp1.Write(data, 0, length);
@@ -138,6 +152,9 @@ namespace SPDisplay {
                 return -1;
             }
         }
+        /*
+         * 关闭端口，释放资源
+         */
         public void ClosePort() {
             sp1.Close();
             sp1.Dispose();

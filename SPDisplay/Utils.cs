@@ -23,6 +23,7 @@ namespace SPDisplay
             }
             Console.WriteLine(" ");
         }
+        /*计算CRC*/
         public static byte CRCSUM(byte[] data, int length) {
             byte result = 0x00;
             for (int i = 0; i < length; i++) {
@@ -30,6 +31,7 @@ namespace SPDisplay
             }
             return result;
         }
+        /*计算随机数*/
         public static byte[] getRadomByte() {
 
             int n = utilsrandom.Next(0, 268465455);
@@ -41,10 +43,10 @@ namespace SPDisplay
             ret[3] = d[0];
             return ret;
         }
-
-        public static String HextString(byte[] b, ulong length, Boolean spac) {
+        /*将Hex换成Hexstring*/
+        public static String HextString(byte[] b, int length, Boolean spac) {
             String ret = "";
-            for (ulong i = 0; i < length; i++) {
+            for (int i = 0; i < length; i++) {
                 ret = ret + b[i].ToString("X2");
                 if (spac) {
                     ret = ret + " ";
@@ -52,24 +54,9 @@ namespace SPDisplay
             }
             return ret;
         }
-
-      
-        /*public static byte[] String2Byte(string s, bool space) {
-           
-
-            int byteLength = s.Length / 2;
-            byte[] bytes = new byte[byteLength];
-            string hex;
-            int j = 0;
-            for (int i = 0; i < bytes.Length; i++) {
-
-                hex = new String(new Char[] { s[j], s[j + 1] });
-
-                bytes[i] = HexToByte(hex);
-                j = j + 2;
-
-            }
-        }*/
+        /*
+         * HexString转Hex
+         */
         public static byte[] HexToBytes(string s) {
             int len = s.Length;
             s = s.ToUpper();
@@ -112,9 +99,11 @@ namespace SPDisplay
 
         }
 
+        //获取bit 01 值
         public static byte getbitValue(byte invalue, byte bitadd) {
            return (byte)((byte)(invalue << (bitadd)) >> 7);
         }
+        //计算两个地址内容是否一样
         public static Boolean SameArray(byte[] arr1, byte[] key) {
             for (int i = 0; i < key.Length; i++) {
                 if (arr1[i] != key[i]) {
@@ -133,6 +122,9 @@ namespace SPDisplay
             ret[3] = d[0];
             return ret;
         }
+        /*
+         * 换高位
+         */
         public static byte[] changeHigh(byte[] datain) {
             byte temp1 = datain[0];
             byte temp2 = datain[1];

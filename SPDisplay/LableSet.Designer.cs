@@ -30,7 +30,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(140, 91);
+            this.button1.Location = new System.Drawing.Point(139, 116);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -41,7 +41,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(29, 58);
+            this.label1.Location = new System.Drawing.Point(20, 51);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(37, 15);
             this.label1.TabIndex = 1;
@@ -49,7 +49,7 @@
             // 
             // NameTextbox
             // 
-            this.NameTextbox.Location = new System.Drawing.Point(82, 52);
+            this.NameTextbox.Location = new System.Drawing.Point(70, 48);
             this.NameTextbox.Name = "NameTextbox";
             this.NameTextbox.Size = new System.Drawing.Size(294, 25);
             this.NameTextbox.TabIndex = 2;
@@ -63,8 +63,11 @@
             this.Controls.Add(this.NameTextbox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "LableSet";
-            this.Text = "LableSet";
+            this.Text = "设置行名";
             this.Load += new System.EventHandler(this.LableSet_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

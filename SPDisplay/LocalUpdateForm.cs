@@ -24,23 +24,19 @@ namespace SPDisplay {
             ////openFileDialog1.ShowDialog();
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = "c:\\";//注意这里写路径时要用c:\\而不是c:\
-            openFileDialog.Filter = "文本文件|*.*|bin文件|*.bin|所有文件|*.*";
+            //openFileDialog.InitialDirectory = "c:\\";//注意这里写路径时要用c:\\而不是c:\
+            openFileDialog.Filter = "jed文件|*.jed|bit文件|*.bit|所有文件|*.*";
             openFileDialog.RestoreDirectory = true;
             openFileDialog.FilterIndex = 1;
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                string fName = openFileDialog.FileName;
                 FileNameTextBox.Text = fName;
-               //byte[] data = File.ReadAllBytes(fName);
-                //Utils.dumpdata(data, data.Length, "data");
-                //isFileHaveName = true;
-                //richTextBox1.Text = fileOpen.ReadFile();
-                //richTextBox1.AppendText("");
             }
         }
 
         private void StartBtn_Click(object sender, EventArgs e) {
             Sender s = new Sender();
+            StartBtn.Enabled = true;
             try {
                 s.initSerialPort(paramList[0], "115200", "none", "8", "1", paramList[1]);
                 s.OpenPort();
@@ -77,17 +73,21 @@ namespace SPDisplay {
                     //Console.WriteLine();
                     progressBar1.Value = sendcounter/(datalen/100);
                     System.Threading.Thread.Sleep(100);
+                    Application.DoEvents();
                    
                 }
                 s.ClosePort();
                 progressBar1.Value = 100;
+                
             }
+            StartBtn.Enabled = false;
         }
 
         private void LocalUpdateForm_Load(object sender, EventArgs e) {
+            //强制设置通讯端口
             while (loadFile() == -1) 
             {
-                Form2 f = new Form2();
+                DeviceSetupForm f = new DeviceSetupForm();
                 f.ShowDialog();
             }
 
